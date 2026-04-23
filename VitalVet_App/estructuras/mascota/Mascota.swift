@@ -7,6 +7,16 @@
 
 import UIKit
 
-class Mascota: NSObject {
-
+nonisolated
+struct Mascota: Codable {
+    let idMascota: Int
+    let nombreMascota: String
+    let especie: String
+    let raza: String
+    let sexo: String
+    let nombreDuenio: String
+    let dniDuenio: String
+    let edad: Int
+    let pesoActual: Double
+    let fotoUrl: String
 }

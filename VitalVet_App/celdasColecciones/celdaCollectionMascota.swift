@@ -9,4 +9,8 @@ import UIKit
 
 class celdaCollectionMascota: UICollectionViewCell {
     
+    @IBOutlet weak var txtRaza: UILabel!
+    @IBOutlet weak var txtespecie: UILabel!
+    @IBOutlet weak var txtnombreMascota: UILabel!
+    @IBOutlet weak var imgmascota: UIImageView!
 }
