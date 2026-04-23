@@ -83,7 +83,7 @@ class AuthService {
                     do {
                         let usuario = try JSONDecoder().decode(UsuarioInfoDTO.self, from: data)
                         let defaults = UserDefaults.standard
-                        
+                        defaults.set(usuario.idUsuario, forKey: "userId")
                         defaults.set(usuario.rol, forKey: "userRol")
                         defaults.set(usuario.nombres, forKey: "userNombre")
                         defaults.set(usuario.apellidos, forKey: "userApellidos")
