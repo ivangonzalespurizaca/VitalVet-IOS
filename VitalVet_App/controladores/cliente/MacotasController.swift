@@ -1,91 +1,85 @@
-//
-//  MacotasController.swift
-//  VitalVet_App
-//
-//  Created by XCODE on 23/04/26.
-//
-
 import UIKit
 import Alamofire
 
-class MacotasController: UIViewController,UICollectionViewDataSource,UICollectionViewDelegate {
+class MacotasController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
+    var listaMascotas: [Mascota] = []
+    @IBOutlet weak var cvMascotas: UICollectionView!
     
-    var listaMascotas:[Mascota]=[]
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        cvMascotas.dataSource = self
+        cvMascotas.delegate = self
+        
+        cargarMascotasDeAPI()
+    }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        cargarMascotasDeAPI()
+    }
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        listaMascotas.count
+        return listaMascotas.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
         let cell = cvMascotas.dequeueReusableCell(withReuseIdentifier: "celdaMascotas", for: indexPath) as! celdaCollectionMascota
         
-        // Obtenemos el objeto mascota de la posición actual
         let mascota = listaMascotas[indexPath.item]
-        
-        // Asignamos los textos
         cell.txtnombreMascota.text = mascota.nombreMascota
         cell.txtespecie.text = mascota.especie
         cell.txtRaza.text = mascota.raza
         
-        // Para la imagen desde URL (usando una función básica de carga):
-        if let url = URL(string: mascota.fotoUrl) {
+        
+        var urlString = mascota.fotoUrl
+        if urlString.hasPrefix("http://") {
+            urlString = urlString.replacingOccurrences(of: "http://", with: "https://")
+        }
+        let urlConCache = urlString + "?v=\(Date().timeIntervalSince1970)"
+
+        if let url = URL(string: urlConCache) {
             cargarImagen(url: url, en: cell.imgmascota)
         }
-        
-        
+
         cell.layer.cornerRadius = 10
-        
         return cell
     }
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let ancho = collectionView.frame.width - 40
-        return CGSize(width: ancho, height: 200)
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let mascotaSeleccionada = listaMascotas[indexPath.item]
+        performSegue(withIdentifier: "irActualizarFoto", sender: mascotaSeleccionada)
     }
 
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "irActualizarFoto",
+           let destino = segue.destination as? ActualizarFotoController,
+           let mascota = sender as? Mascota {
+            destino.idMascota = mascota.idMascota
+        }
+    }
+    
+    
     func cargarImagen(url: URL, en imageView: UIImageView) {
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        
         DispatchQueue.global().async {
             if let data = try? Data(contentsOf: url) {
                 DispatchQueue.main.async {
-                    imageView.image = UIImage(data: data)
+                    UIView.transition(with: imageView, duration: 0.3, options: .transitionCrossDissolve) {
+                        imageView.image = UIImage(data: data)
+                    }
                 }
             }
         }
     }
-    
-
-    @IBOutlet weak var cvMascotas: UICollectionView!
-    
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-       
-        cvMascotas.dataSource = self
-        cvMascotas.delegate = self
-            
-            // Luego llamas a tu función de Alamofire
-        cargarMascotasDeAPI()
-
-    }
-    
-  
-
-
 
     func cargarMascotasDeAPI() {
-        let defaults = UserDefaults.standard
-        
-        guard let token = defaults.string(forKey: "userToken"),
-                  let userId = defaults.string(forKey: "userId") else {
-                return
-            }
+        guard let token = UserDefaults.standard.string(forKey: "userToken"),
+              let userId = UserDefaults.standard.string(forKey: "userId") else { return }
 
-    
         let url = "https://apiveterinaria-production-238b.up.railway.app/api/mascotas/cliente/\(userId)"
-        
-        print("Consultando mascotas del cliente: \(userId)")
-
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(token)",
             "Accept": "application/json"
@@ -97,18 +91,19 @@ class MacotasController: UIViewController,UICollectionViewDataSource,UICollectio
                 switch response.result {
                 case .success(let mascotasRecibidas):
                     self.listaMascotas = mascotasRecibidas
-                    DispatchQueue.main.async {
-                        self.cvMascotas.reloadData()
-                    }
-                    
+                    self.cvMascotas.reloadData()
                 case .failure(let error):
-                    // Si la API responde 404 es probable que el cliente no tenga mascotas aún
                     print("Error al obtener las mascotas: \(error.localizedDescription)")
                 }
             }
     }
     
+    @IBAction func btnNuevo(_ sender: UIButton) {
+        performSegue(withIdentifier: "nuevoMascota", sender: nil)
+    }
     
-
-
+    
+    @IBAction func btnVacunas(_ sender: UIButton) {
+        performSegue(withIdentifier: "vacunas", sender: nil)
+    }
 }
