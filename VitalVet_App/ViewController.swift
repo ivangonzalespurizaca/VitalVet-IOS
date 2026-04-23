@@ -47,6 +47,11 @@ class ViewController: UIViewController {
         }
     }
     
+    @IBAction func btnCrearCuenta(_ sender: Any) {
+        performSegue(withIdentifier: "segueRegistrarCuenta", sender: nil)
+    }
+    
+    
     private func navegarSegunRol(usuario: UsuarioInfoDTO) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let rolStr = usuario.rol.uppercased()

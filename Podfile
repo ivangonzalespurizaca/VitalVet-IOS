@@ -6,6 +6,8 @@ target 'VitalVet_App' do
   use_frameworks!
 
   # Pods for VitalVet_App
-pod 'Alamofire'
-
+  pod 'Kingfisher'
+  pod 'Alamofire'
+  pod 'FirebaseCore'
+  pod 'FirebaseAuth'
 end

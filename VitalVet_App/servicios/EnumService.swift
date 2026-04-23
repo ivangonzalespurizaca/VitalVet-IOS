@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import Alamofire
 
-class EnunService{
+class EnumService{
     
     let enumsGenerosURL = "https://apiveterinaria-production-238b.up.railway.app/api/public/enums/generos"
 

@@ -7,6 +7,7 @@
 
 import UIKit
 
+nonisolated
 struct UsuarioRegisterDTO: Codable {
     let idToken: String
     let dni: String

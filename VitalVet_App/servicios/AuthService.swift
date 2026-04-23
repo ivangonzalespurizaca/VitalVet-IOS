@@ -13,6 +13,7 @@ class AuthService {
     // URLs
     let googleURL = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyA6cPVWVts1H5efEXPmYVDyPwaIpIBXpFw"
     let railwaySyncURL = "https://apiveterinaria-production-238b.up.railway.app/api/public/auth/sync"
+    let railwayRegisterURL = "https://apiveterinaria-production-238b.up.railway.app/api/public/auth/registrar"
         
     func loginYSync(email: String, password: String, completion: @escaping (Result<UsuarioInfoDTO, Error>) -> Void) {
         print("1. Iniciando petición a Firebase...")
@@ -25,19 +26,11 @@ class AuthService {
         
         AF.request(googleURL, method: .post, parameters: parameters, encoding: JSONEncoding.default)
             .responseData { response in
-                // --- BLOQUE DE DEPURACIÓN ---
-                if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
-                    print(" --- CONTENIDO REAL DE FIREBASE ---")
-                    print(utf8Text)
-                    print("--------------------------------------")
-                }
-                
                 switch response.result {
                 case .success(let data):
                     do {
                         // Intentamos decodificar manualmente aquí
                         let loginData = try JSONDecoder().decode(AuthResponse.self, from: data)
-                        
                         let token = loginData.idToken
                         UserDefaults.standard.set(token, forKey: "userToken")
                         UserDefaults.standard.set(true, forKey: "isLoggedIn")
@@ -56,6 +49,25 @@ class AuthService {
                 }
             }
     }
+    
+    
+    func registrarYPersistir(datos: UsuarioRegisterDTO, completion: @escaping (Result<UsuarioInfoDTO, Error>) -> Void) {
+        AF.request(railwayRegisterURL, method: .post, parameters: datos, encoder: JSONParameterEncoder.default)
+            .response { response in
+                // --- AÑADE ESTO PARA VER EL ERROR REAL ---
+                if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
+                    print("DEBUG RAILWAY: \(utf8Text)")
+                }
+                // -----------------------------------------
+
+                if let code = response.response?.statusCode, (200...299).contains(code) {
+                    self.sincronizarConRailway(token: datos.idToken, completion: completion)
+                } else {
+                    let error = NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Error en el servidor de Railway"])
+                    completion(.failure(error))
+                }
+            }
+    }
 
     private func sincronizarConRailway(token: String, completion: @escaping (Result<UsuarioInfoDTO, Error>) -> Void) {
         let syncParams: [String: Any] = ["idToken": token]
@@ -63,15 +75,8 @@ class AuthService {
         AF.request(railwaySyncURL,
                    method: .post,
                    parameters: syncParams,
-                   encoding: JSONEncoding.default) // Asegúrate de que sea JSONEncoding
-            .responseData { response in // Cambiamos a responseData para ver el error crudo
-                
-                // --- ESTO TE DIRÁ QUÉ RESPONDE RAILWAY ---
-                if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
-                    print("--- RESPUESTA CRUDA DEL SERVIDOR ---")
-                    print(utf8Text)
-                    print("------------------------------------")
-                }
+                   encoding: JSONEncoding.default)
+            .responseData { response in
                 
                 switch response.result {
                 case .success(let data):
@@ -90,7 +95,6 @@ class AuthService {
                         completion(.success(usuario))
                     } catch {
                         print(" ERROR AL DECODIFICAR: \(error)")
-                        // Aquí es donde Swift nos dirá si falta un campo
                         completion(.failure(error))
                     }
                 case .failure(let error):
@@ -99,4 +103,5 @@ class AuthService {
                 }
         }
     }
+    
 }

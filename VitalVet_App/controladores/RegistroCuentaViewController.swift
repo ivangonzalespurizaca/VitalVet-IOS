@@ -7,23 +7,34 @@
 
 import UIKit
 
-class RegistroViewController: UIViewController {
-
+class RegistroCuentaViewController: UIViewController {
+    
+    @IBOutlet weak var txtEmail: UITextField!
+    @IBOutlet weak var txtContrasenia: UITextField!
+    @IBOutlet weak var txtRepContrasenia: UITextField!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "segueRegistrarPerfil" {
+            if let pantallaDestino = segue.destination as? RegistroPerfilViewController {
+                
+                pantallaDestino.emailRecibido = txtEmail.text
+                pantallaDestino.passwordRecibido = txtContrasenia.text
+            }
+        }
     }
-    */
+    
+    
+    @IBAction func btnSeguiente(_ sender: Any) {
+        if txtContrasenia.text == txtRepContrasenia.text {
+            performSegue(withIdentifier: "segueRegistrarPerfil", sender: self)
+        } else {
+            print("Las contraseñas no coinciden")
+        }
+    }
+    
 
 }
