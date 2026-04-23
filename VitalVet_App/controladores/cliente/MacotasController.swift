@@ -1,13 +1,13 @@
 //
-//  CarnetVacunasViewController.swift
+//  MacotasController.swift
 //  VitalVet_App
 //
-//  Created by Oscar Ivan Gonzales Purizaca on 20/04/26.
+//  Created by XCODE on 23/04/26.
 //
 
 import UIKit
 
-class CarnetVacunasViewController: UIViewController {
+class MacotasController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
