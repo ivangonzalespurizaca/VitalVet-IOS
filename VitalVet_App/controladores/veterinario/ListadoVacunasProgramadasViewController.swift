@@ -7,11 +7,11 @@
 
 import UIKit
 
-class ListadoVacunasProgramadasViewController: UIViewController {
+class ListadoVacunasProgramadasViewController: UIViewControllerProfile {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        cambiarTitulo(nuevoTexto: "Vacunas Programadas")
         // Do any additional setup after loading the view.
     }
     

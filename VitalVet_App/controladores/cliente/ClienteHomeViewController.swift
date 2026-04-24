@@ -7,11 +7,11 @@
 
 import UIKit
 
-class ClienteHomeViewController: UIViewController {
+class ClienteHomeViewController: UIViewControllerProfile {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
     }
     

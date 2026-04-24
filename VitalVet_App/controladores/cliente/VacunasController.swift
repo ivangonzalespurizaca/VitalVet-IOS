@@ -7,10 +7,11 @@
 
 import UIKit
 
-class VacunasController: UIViewController {
+class VacunasController: UIViewControllerProfile {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        cambiarTitulo(nuevoTexto: "Carnet de Vacunas")
     }
     
 

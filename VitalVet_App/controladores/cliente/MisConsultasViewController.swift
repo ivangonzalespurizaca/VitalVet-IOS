@@ -7,11 +7,11 @@
 
 import UIKit
 
-class MisConsultasViewController: UIViewController {
+class MisConsultasViewController: UIViewControllerProfile {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        cambiarTitulo(nuevoTexto: "Mis Consultas")
         // Do any additional setup after loading the view.
     }
     

@@ -1,7 +1,7 @@
 import UIKit
 import Alamofire
 
-class MacotasController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+class MacotasController: UIViewControllerProfile, UICollectionViewDataSource, UICollectionViewDelegate {
     
     var listaMascotas: [Mascota] = []
     @IBOutlet weak var cvMascotas: UICollectionView!
@@ -10,7 +10,7 @@ class MacotasController: UIViewController, UICollectionViewDataSource, UICollect
         super.viewDidLoad()
         cvMascotas.dataSource = self
         cvMascotas.delegate = self
-        
+        cambiarTitulo(nuevoTexto: "Mis Mascotas")
         cargarMascotasDeAPI()
     }
     

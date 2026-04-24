@@ -7,11 +7,11 @@
 
 import UIKit
 
-class ListadoCitasProgramadasViewController: UIViewController {
+class ListadoSolicitudCitasViewController: UIViewControllerProfile {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        cambiarTitulo(nuevoTexto: "Solicitud de Citas")
         // Do any additional setup after loading the view.
     }
     

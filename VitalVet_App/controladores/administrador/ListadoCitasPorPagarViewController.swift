@@ -7,11 +7,11 @@
 
 import UIKit
 
-class ListadoCitasPorPagarViewController: UIViewController {
+class ListadoCitasPorPagarViewController: UIViewControllerProfile {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        cambiarTitulo(nuevoTexto: "Gestionar Citas")
         // Do any additional setup after loading the view.
     }
     

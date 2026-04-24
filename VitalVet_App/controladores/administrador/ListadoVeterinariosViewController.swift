@@ -6,24 +6,63 @@
 //
 
 import UIKit
+import Kingfisher
 
-class ListadoVeterinariosViewController: UIViewController {
+class ListadoVeterinariosViewController: UIViewControllerProfile, UITableViewDataSource, UITableViewDelegate {
+    @IBOutlet weak var tvVeterinarios: UITableView!
+        var listaVets: [VeterinarioInfo] = []
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+        override func viewDidLoad() {
+            super.viewDidLoad()
+            cambiarTitulo(nuevoTexto: "Gestionar Veterinarios")
+            
+            tvVeterinarios.dataSource = self
+            tvVeterinarios.delegate = self
+            
+            cargarVeterinarios()
+        }
+        
+        func cargarVeterinarios() {
+            guard let token = UserDefaults.standard.string(forKey: "userToken") else { return }
+            
+            VeterinarioService.shared.listarVeterinarios(token: token) { [weak self] resultado in
+                switch resultado {
+                case .success(let vets):
+                    self?.listaVets = vets
+                    self?.tvVeterinarios.reloadData()
+                case .failure(let error):
+                    print("Error: \(error.localizedDescription)")
+                }
+            }
+        }
 
-        // Do any additional setup after loading the view.
-    }
-    
+        func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+            return listaVets.count
+        }
+        
+        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "celda", for: indexPath) as! CeldaVeterinarios
+            let vet = listaVets[indexPath.row]
+            
+            cell.lblNombres.text = "\(vet.nombres) \(vet.apellidos)"
+            
+            cell.lblEspecialidad.text = vet.especialidad.replacingOccurrences(of: "_", with: " ").capitalized
+            cell.lblColegiatura.text = "Colegiatura: \(vet.numColegiatura)"
+            
+            // Foto con Kingfisher
+            let url = URL(string: vet.fotoUrl ?? "")
+            cell.imgVet.kf.setImage(with: url, placeholder: UIImage(systemName: "person.crop.circle.fill"))
+            
+            return cell
+        }
+        
+        // Altura de la celda (ajústalo según tu diseño)
+        func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+            return 100
+        }
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
+        @IBAction func btnRegistrar(_ sender: Any) {
+            performSegue(withIdentifier: "segueNuevoVet", sender: nil)
+        }
 
 }

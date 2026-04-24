@@ -7,11 +7,11 @@
 
 import UIKit
 
-class ListadoConsultasViewController: UIViewController {
+class ListadoConsultasViewController: UIViewControllerProfile {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        cambiarTitulo(nuevoTexto: "Gestionar Consultas")
         // Do any additional setup after loading the view.
     }
     

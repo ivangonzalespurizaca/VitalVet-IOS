@@ -8,7 +8,7 @@
 import UIKit
 import Alamofire
 
-class ActualizarFotoController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate,UITableViewDelegate,UITableViewDataSource {
+class ActualizarFotoController: UIViewControllerProfile, UIImagePickerControllerDelegate, UINavigationControllerDelegate,UITableViewDelegate,UITableViewDataSource {
    
     
 
@@ -17,7 +17,7 @@ class ActualizarFotoController: UIViewController, UIImagePickerControllerDelegat
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        cambiarTitulo(nuevoTexto: "Actualizar Mascota")
         tvvacunas.dataSource = self
         tvvacunas.delegate = self
         tvvacunas.rowHeight = 120

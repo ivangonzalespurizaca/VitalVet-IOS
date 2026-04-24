@@ -7,12 +7,10 @@
 
 import UIKit
 
-class AdminHomeViewController: UIViewController {
+class AdminHomeViewController: UIViewControllerProfile {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
     }
     
 

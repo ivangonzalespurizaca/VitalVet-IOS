@@ -8,7 +8,7 @@
 import UIKit
 import Alamofire
 
-class NuevaMascotaController: UIViewController ,UIPickerViewDelegate, UIPickerViewDataSource{
+class NuevaMascotaController: UIViewControllerProfile ,UIPickerViewDelegate, UIPickerViewDataSource{
     
     
     @IBOutlet weak var txtnombreMascota: UITextField!
@@ -31,6 +31,7 @@ class NuevaMascotaController: UIViewController ,UIPickerViewDelegate, UIPickerVi
             super.viewDidLoad()
             pvmascota.delegate = self
             pvmascota.dataSource = self
+            cambiarTitulo(nuevoTexto: "Nueva Mascota")
             segsexo.setTitle("MACHO", forSegmentAt: 0)
             segsexo.setTitle("HEMBRA", forSegmentAt: 1)
             segsexo.selectedSegmentIndex = 0

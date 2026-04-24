@@ -7,11 +7,11 @@
 
 import UIKit
 
-class HorariosViewController: UIViewController {
+class HorariosViewController: UIViewControllerProfile {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        cambiarTitulo(nuevoTexto: "Gestionar Horarios")
         // Do any additional setup after loading the view.
     }
     

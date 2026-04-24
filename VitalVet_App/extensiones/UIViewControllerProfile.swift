@@ -6,24 +6,60 @@
 //
 
 import UIKit
+import Kingfisher
 
 class UIViewControllerProfile: UIViewController {
+    
+    let imgPerfil = UIImageView()
+    let lblSaludo = UILabel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        setupHeaderBase()
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    private func setupHeaderBase() {
+        // 1. Configuración de la Foto (Mantenemos a la derecha)
+        imgPerfil.frame = CGRect(x: view.frame.width - 70, y: 60, width: 50, height: 50)
+        imgPerfil.layer.cornerRadius = 25
+        imgPerfil.clipsToBounds = true
+        imgPerfil.isUserInteractionEnabled = true
+        imgPerfil.contentMode = .scaleAspectFill
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(irAEditarPerfil))
+        imgPerfil.addGestureRecognizer(tap)
+        
+        // 2. Configuración del Texto (CENTRADO)
+        // Usamos todo el ancho de la pantalla para que el centro sea real
+        lblSaludo.frame = CGRect(x: 0, y: 60, width: view.frame.width, height: 50)
+        lblSaludo.textAlignment = .center // <--- Magia del centro
+        lblSaludo.font = UIFont.boldSystemFont(ofSize: 18)
+        
+        view.addSubview(lblSaludo)
+        view.addSubview(imgPerfil) // La foto va encima por si el texto es muy largo
+        
+        view.bringSubviewToFront(imgPerfil)
+        view.bringSubviewToFront(lblSaludo)
+        
+        actualizarDatosHeader()
     }
-    */
 
+    func actualizarDatosHeader() {
+        let defaults = UserDefaults.standard
+        let nombre = defaults.string(forKey: "userNombre") ?? "Usuario"
+        lblSaludo.text = "¡Hola, \(nombre)!"
+        
+        if let urlStr = defaults.string(forKey: "userFotoUrl"), let url = URL(string: urlStr) {
+            imgPerfil.kf.setImage(with: url, placeholder: UIImage(systemName: "person.circle.fill"))
+        }
+    }
+
+    // FUNCIÓN PARA CAMBIAR EL TEXTO DESDE OTROS LADOS
+    func cambiarTitulo(nuevoTexto: String) {
+        lblSaludo.text = nuevoTexto
+    }
+
+    @objc func irAEditarPerfil() {
+        print("Navegando a edición de perfil...")
+    }
 }

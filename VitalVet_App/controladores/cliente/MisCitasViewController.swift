@@ -7,11 +7,11 @@
 
 import UIKit
 
-class MisCitasViewController: UIViewController {
+class MisCitasViewController: UIViewControllerProfile {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        cambiarTitulo(nuevoTexto: "Mis Citas")
         // Do any additional setup after loading the view.
     }
     

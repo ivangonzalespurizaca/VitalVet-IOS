@@ -7,7 +7,7 @@
 
 import UIKit
 
-class VeterinarioHomeViewController: UIViewController {
+class VeterinarioHomeViewController: UIViewControllerProfile {
 
     override func viewDidLoad() {
         super.viewDidLoad()
