@@ -14,7 +14,7 @@ class CeldaVeterinarios: UITableViewCell {
     @IBOutlet weak var lblEspecialidad: UILabel!
     @IBOutlet weak var lblColegiatura: UILabel!
     @IBOutlet weak var imgVet: UIImageView!
-    
+    @IBOutlet weak var lblActivo: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

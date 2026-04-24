@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class ViewController: UIViewController {
     
@@ -53,6 +54,17 @@ class ViewController: UIViewController {
     
     
     private func navegarSegunRol(usuario: UsuarioInfoDTO) {
+        
+        if usuario.activo == false {
+            print("Acceso denegado: Usuario inactivo.")
+            
+            // Cerramos la sesión de Firebase inmediatamente por seguridad
+            try? FirebaseAuth.Auth.auth().signOut()
+            
+            self.mostrarAlerta(mensaje: "Tu cuenta ha sido desactivada por el administrador.")
+            return
+        }
+        
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let rolStr = usuario.rol.uppercased()
         

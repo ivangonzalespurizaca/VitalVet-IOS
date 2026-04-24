@@ -11,15 +11,18 @@ import FirebaseAuth
 class RegistrarVeterinarioViewController: UIViewControllerProfile, UIPickerViewDelegate, UIPickerViewDataSource {
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int { return 1 }
-        func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-            return listaEspecialidades.count
-        }
-        func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-            return listaEspecialidades[row]
-        }
-        func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-            txtEspecialidad.text = listaEspecialidades[row]
-        }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return listaEspecialidades.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return listaEspecialidades[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        txtEspecialidad.text = listaEspecialidades[row]
+    }
     
     var listaEspecialidades: [String] = []
     
@@ -87,13 +90,24 @@ class RegistrarVeterinarioViewController: UIViewControllerProfile, UIPickerViewD
             VeterinarioService.shared.registrarVeterinario(datos: datosFinales, token: token) { resultado in
                 switch resultado {
                 case .success:
-                    print("¡Éxito total!")
-                    self.navigationController?.popToRootViewController(animated: true)
+                    // Creamos la alerta
+                    let alerta = UIAlertController(title: "VitalVet", message: "¡Veterinario registrado con éxito!", preferredStyle: .alert)
+                    let accionOk = UIAlertAction(title: "Aceptar", style: .default) { _ in
+                        self.navigationController?.popToRootViewController(animated: true)
+                    }
+                    alerta.addAction(accionOk)
+                    self.present(alerta, animated: true)
                 case .failure(let error):
-                    print("Error Railway: \(error.localizedDescription)")
+                    self.mostrarAlerta(mensaje: "Error Railway: \(error.localizedDescription)", title: "Error")
                 }
             }
         }
+    }
+    
+    private func mostrarAlerta(mensaje: String, title: String) {
+        let alerta = UIAlertController(title: title, message: mensaje, preferredStyle: .alert)
+        alerta.addAction(UIAlertAction(title: "OK", style: .default))
+        self.present(alerta, animated: true)
     }
     
 

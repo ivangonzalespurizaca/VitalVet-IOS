@@ -15,7 +15,7 @@ struct VeterinarioInfo: Codable {
     let apellidos: String
     let email: String
     let fotoUrl: String?
-    let activo: Bool
+    let activo: Bool?
     let dni: String
     let numColegiatura: String
     let especialidad: String

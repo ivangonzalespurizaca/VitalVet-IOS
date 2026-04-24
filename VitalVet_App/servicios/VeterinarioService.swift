@@ -45,4 +45,23 @@ class VeterinarioService {
                 }
             }
     }
+    
+    func actualizarVeterinario(id: Int, datos: VeterinarioUpdate, token: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        let url = "\(baseURL)/\(id)"
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(token)",
+            "Content-Type": "application/json"
+        ]
+
+        AF.request(url, method: .put, parameters: datos, encoder: JSONParameterEncoder.default, headers: headers)
+            .validate()
+            .response { response in
+                switch response.result {
+                case .success:
+                    completion(.success(()))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+    }
 }
