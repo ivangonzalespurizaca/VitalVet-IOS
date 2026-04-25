@@ -56,7 +56,7 @@ class RegistrarVeterinarioViewController: UIViewControllerProfile, UIPickerViewD
             }
         }
     }
-    
+
     @IBAction func btnRegistrar(_ sender: Any) {
         guard let email = txtEmail.text, !email.isEmpty,
               let password = dniProv, password.count >= 6,
