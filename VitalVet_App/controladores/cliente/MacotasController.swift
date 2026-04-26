@@ -32,6 +32,8 @@ class MacotasController: UIViewControllerProfile, UICollectionViewDataSource, UI
         cell.txtRaza.text = mascota.raza
         
         
+        
+        
         var urlString = mascota.fotoUrl
         if urlString.hasPrefix("http://") {
             urlString = urlString.replacingOccurrences(of: "http://", with: "https://")
