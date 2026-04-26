@@ -24,9 +24,9 @@ class HorariosViewController: UIViewControllerProfile, UITableViewDelegate, UITa
         return cell
     }
     
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        <#code#>
-//    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "segueDatosHorario", sender: nil)
+    }
     
     
     
@@ -67,6 +67,14 @@ class HorariosViewController: UIViewControllerProfile, UITableViewDelegate, UITa
         pvVeterinario.dataSource = self
         tvHorarios.rowHeight = 60
         cargarVeterinarios()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if vetSeleccionado != nil {
+            btnBuscarHorario(self)
+        }
     }
 
     private func cargarVeterinarios() {
@@ -120,10 +128,19 @@ class HorariosViewController: UIViewControllerProfile, UITableViewDelegate, UITa
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Segue para REGISTRAR (Nuevo)
         if segue.identifier == "segueNuevoHorario",
-           let pantallaDestino = segue.destination as? RegistroHorarioViewController {
-            // Pasamos el ID del veterinario seleccionado
+           let pantallaDestino = segue.destination as? RegistrarHorarioViewController {
             pantallaDestino.idVeterinarioRecibido = vetSeleccionado?.idVeterinario
+        }
+        
+        // Segue para DETALLES / EDITAR (Existente)
+        if segue.identifier == "segueDatosHorario",
+           let pantallaDestino = segue.destination as? EditarHorarioViewController, // Asegúrate que el nombre de la clase sea este
+           let indice = tvHorarios.indexPathForSelectedRow?.row {
+            
+            let horarioSeleccionado = listaHorarios[indice]
+            pantallaDestino.horarioRecibido = horarioSeleccionado
         }
     }
     
