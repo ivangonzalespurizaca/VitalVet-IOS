@@ -30,6 +30,7 @@ struct VacunaDTO: Codable {
 }
 
 // DTO para consulta
+nonisolated
 struct ConsultaDTO: Codable {
     let idConsulta: Int
     let idCita: Int
