@@ -24,6 +24,7 @@ class ListadoVacunasProgramadasViewController: UIViewController,UITableViewDataS
         tvmascotas.dataSource = self
         tvmascotas.delegate = self
         tvmascotas.rowHeight = 120
+        tvmascotas.delaysContentTouches = false
     }
     
     @IBAction func btnBuscarDni(_ sender: UIButton) {
@@ -79,13 +80,24 @@ class ListadoVacunasProgramadasViewController: UIViewController,UITableViewDataS
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "celdaxdni", for: indexPath) as! celdaMascotaxdni
         
-        
-        cell.txtnombre.text = listaMascotas[indexPath.row].nombreMascota
-        cell.txtraza.text = listaMascotas[indexPath.row].raza
-        cell.txtEspecie.text = listaMascotas[indexPath.row].especie
-        
+        let mascota = listaMascotas[indexPath.row]
+        cell.txtnombre.text = mascota.nombreMascota
+        cell.txtraza.text = mascota.raza
+        cell.txtEspecie.text = mascota.especie
+
+        // Configurar Doble Tap
+        let doubleTap = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap(_:)))
+        doubleTap.numberOfTapsRequired = 2
+        cell.addGestureRecognizer(doubleTap)
         
         return cell
+    }
+
+    @objc func handleDoubleTap(_ sender: UITapGestureRecognizer) {
+        let touchPoint = sender.location(in: tvmascotas)
+        if let indexPath = tvmascotas.indexPathForRow(at: touchPoint) {
+            performSegue(withIdentifier: "cambiarestado", sender: indexPath)
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -97,14 +109,25 @@ class ListadoVacunasProgramadasViewController: UIViewController,UITableViewDataS
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if(segue.identifier == "programacion"){
-            let pantalla2 = segue.destination as! ProgramarcitaController
-            pantalla2.id = listaMascotas[tvmascotas.indexPathForSelectedRow!.row].idMascota
+        // Caso 1: Programar Cita (Tap simple)
+        if segue.identifier == "programacion" {
+            if let indexPath = tvmascotas.indexPathForSelectedRow {
+                let pantalla2 = segue.destination as! ProgramarcitaController
+                pantalla2.id = listaMascotas[indexPath.row].idMascota
+            }
+        }
+        // Caso 2: El nuevo Segue (Doble Tap)
+        else if segue.identifier == "cambiarestado" {
+            if let indexPath = sender as? IndexPath {
+                let detalleVC = segue.destination as! CambiarEstadoController // Reemplaza con tu clase
+                detalleVC.idMascota = listaMascotas[indexPath.row].idMascota
+            }
         }
     }
     
     
 }
+    
     
     
 
