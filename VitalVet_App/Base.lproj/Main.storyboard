@@ -570,10 +570,10 @@
             </objects>
             <point key="canvasLocation" x="632.82442748091603" y="224.64788732394368"/>
         </scene>
-        <!--Listado Citas Por Pagar View Controller-->
+        <!--Listado Log Sistema View Controller-->
         <scene sceneID="K51-OV-yq2">
             <objects>
-                <viewController storyboardIdentifier="ListadoCitasPorPagarVC" id="kDA-wV-NnY" customClass="ListadoCitasPorPagarViewController" customModule="VitalVet_App" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ListadoCitasPorPagarVC" id="kDA-wV-NnY" customClass="ListadoLogSistemaViewController" customModule="VitalVet_App" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="NPv-Lc-fPO">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -770,6 +770,297 @@
             </objects>
             <point key="canvasLocation" x="7861.8320610687024" y="224.64788732394368"/>
         </scene>
+        <!--Seleccionar Veterinario View Controller-->
+        <scene sceneID="prC-bE-ee1">
+            <objects>
+                <viewController id="Hlv-Ld-6hZ" customClass="SeleccionarVeterinarioViewController" customModule="VitalVet_App" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="P6U-xM-1jV">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Mascota" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1X1-FW-7iu">
+                                <rect key="frame" x="49" y="172" width="66" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Hmi-Ea-rd5">
+                                <rect key="frame" x="49" y="213" width="295" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m8h-Ec-3pM">
+                                <rect key="frame" x="49" y="670" width="295" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="gray" title="Siguiente"/>
+                                <connections>
+                                    <action selector="btnSiguiente:" destination="Hlv-Ld-6hZ" eventType="touchUpInside" id="CgS-Jy-mFr"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Veterinario" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WRc-gB-1fV">
+                                <rect key="frame" x="49" y="270" width="83" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ElF-0C-HTZ">
+                                <rect key="frame" x="49" y="299" width="295" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="utF-D4-lmC" userLabel="Tv Horarios Disponibles">
+                                <rect key="frame" x="49" y="362" width="295" height="272"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="celda" rowHeight="74" id="KCY-HY-2qw" userLabel="Celdas" customClass="CeldaHorariosDisponibles" customModule="VitalVet_App" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="50" width="295" height="74"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="KCY-HY-2qw" id="F4u-h9-K7f">
+                                            <rect key="frame" x="0.0" y="0.0" width="295" height="74"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Fecha | Hora Inicio - Hora Fin" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pgd-tg-0K1">
+                                                    <rect key="frame" x="16" y="10" width="220" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="lblFechaHora" destination="Pgd-tg-0K1" id="FvQ-U4-3NK"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="bhY-cO-jS3"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="H3b-eE-pWY"/>
+                    <connections>
+                        <outlet property="btnSiguiente" destination="m8h-Ec-3pM" id="AjE-1e-zoK"/>
+                        <outlet property="tvHorariosDisponibles" destination="utF-D4-lmC" id="cbI-Fu-G8k"/>
+                        <outlet property="txtMascota" destination="Hmi-Ea-rd5" id="PEv-Pu-aRh"/>
+                        <outlet property="txtVeterinario" destination="ElF-0C-HTZ" id="VyJ-3w-pft"/>
+                        <segue destination="POb-YQ-19D" kind="show" identifier="segueRegistrarCita" id="JW3-aT-6CL"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="TuJ-Rd-bhF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="7093.8931297709923" y="1050"/>
+        </scene>
+        <!--Registrar Cita View Controller-->
+        <scene sceneID="hky-jc-Oeq">
+            <objects>
+                <viewController id="POb-YQ-19D" customClass="RegistrarCitaViewController" customModule="VitalVet_App" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="UHq-ao-DMD">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" translatesAutoresizingMaskIntoConstraints="NO" id="JGS-zm-eRi">
+                                <rect key="frame" x="42" y="222" width="280" height="42"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            </datePicker>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="hac-me-Hfx">
+                                <rect key="frame" x="42" y="281" width="308" height="256"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="ilt-x0-p2u">
+                                    <size key="itemSize" width="128" height="117"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="celdaSlot" id="QrI-Ot-Fge" customClass="CeldaCollectionSlotHorario" customModule="VitalVet_App" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="128" height="117"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="7MZ-gG-Kdk">
+                                            <rect key="frame" x="0.0" y="0.0" width="128" height="117"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hora" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fBb-v6-D3D">
+                                                    <rect key="frame" x="0.0" y="0.0" width="128" height="117"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="fBb-v6-D3D" secondAttribute="trailing" id="WoX-yM-04w"/>
+                                                <constraint firstItem="fBb-v6-D3D" firstAttribute="top" secondItem="7MZ-gG-Kdk" secondAttribute="top" id="aSF-GV-PQd"/>
+                                                <constraint firstAttribute="bottom" secondItem="fBb-v6-D3D" secondAttribute="bottom" id="oLP-K7-KVu"/>
+                                                <constraint firstItem="fBb-v6-D3D" firstAttribute="leading" secondItem="7MZ-gG-Kdk" secondAttribute="leading" id="xYh-27-QtB"/>
+                                            </constraints>
+                                        </collectionViewCellContentView>
+                                        <size key="customSize" width="128" height="117"/>
+                                        <connections>
+                                            <outlet property="lblHora" destination="fBb-v6-D3D" id="Nx1-qf-PAw"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Motivo" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wfa-7s-hBA">
+                                <rect key="frame" x="42" y="545" width="52" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="uJ4-mc-Bhc">
+                                <rect key="frame" x="42" y="610" width="308" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oNt-lC-K0k">
+                                <rect key="frame" x="42" y="679" width="308" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Registrar"/>
+                                <connections>
+                                    <action selector="btnRegistrar:" destination="POb-YQ-19D" eventType="touchUpInside" id="Pg2-2L-g0J"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Resumen" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EQc-6b-rtL">
+                                <rect key="frame" x="42" y="157" width="316" height="48"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="CS7-YG-vFY"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="1n2-ci-Qxc"/>
+                    <connections>
+                        <outlet property="cvSlotHorarios" destination="hac-me-Hfx" id="l8W-7a-NtE"/>
+                        <outlet property="dpFecha" destination="JGS-zm-eRi" id="5cR-e1-BO6"/>
+                        <outlet property="lblResumen" destination="EQc-6b-rtL" id="G8l-ds-Hcw"/>
+                        <outlet property="txtMotivo" destination="uJ4-mc-Bhc" id="AbR-UX-ITJ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gqw-Ut-Nzo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="7093.8931297709923" y="1762.6760563380283"/>
+        </scene>
+        <!--Datos Cita View Controller-->
+        <scene sceneID="Jpe-Vz-ilG">
+            <objects>
+                <viewController id="MnE-mK-AzY" customClass="DatosCitaViewController" customModule="VitalVet_App" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="yPx-Dk-Seg">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wkS-hg-qdz">
+                                <rect key="frame" x="154" y="172" width="85" height="85"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Estado: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M9h-Z2-ucY">
+                                <rect key="frame" x="41" y="291" width="312" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Nombre Mascota: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ihD-tt-A1c">
+                                <rect key="frame" x="41" y="320" width="312" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Fecha:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CSZ-96-zk1">
+                                <rect key="frame" x="41" y="361" width="153" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Hora:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Qf-1M-DwP">
+                                <rect key="frame" x="200" y="361" width="153" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Especialidad Veterinario:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dqH-jG-c4E">
+                                <rect key="frame" x="39" y="445" width="313" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Motivo" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a6S-XA-TNz">
+                                <rect key="frame" x="40" y="554" width="312" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sun-Gv-Esn">
+                                <rect key="frame" x="57" y="661" width="278" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="tintColor" systemColor="systemRedColor"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="tinted" title="Cancelar"/>
+                                <connections>
+                                    <action selector="btnCancelar:" destination="MnE-mK-AzY" eventType="touchUpInside" id="euY-Gb-2dq"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Nombre Cliente:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Eg5-mk-amj">
+                                <rect key="frame" x="39" y="486" width="313" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Celular Cliente:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mg5-q4-UhS">
+                                <rect key="frame" x="39" y="525" width="313" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Nombre Veterinario:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tpk-JU-CWb">
+                                <rect key="frame" x="39" y="404" width="313" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="MqO-1D-2P9"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="ZfO-dP-E6p"/>
+                    <connections>
+                        <outlet property="btnCancelar" destination="sun-Gv-Esn" id="XMd-sf-hQX"/>
+                        <outlet property="imgMascota" destination="wkS-hg-qdz" id="IjA-Y2-lSo"/>
+                        <outlet property="lblCelularCliente" destination="Mg5-q4-UhS" id="Sjg-LP-nmh"/>
+                        <outlet property="lblEspecialidad" destination="dqH-jG-c4E" id="bLT-Ah-ont"/>
+                        <outlet property="lblEstadoCita" destination="M9h-Z2-ucY" id="rwD-GV-olO"/>
+                        <outlet property="lblFecha" destination="CSZ-96-zk1" id="ZHH-S2-sqI"/>
+                        <outlet property="lblHora" destination="9Qf-1M-DwP" id="9pO-5f-oZl"/>
+                        <outlet property="lblMotivo" destination="a6S-XA-TNz" id="94i-N8-S4Q"/>
+                        <outlet property="lblNombreCliente" destination="Eg5-mk-amj" id="1WQ-ln-09v"/>
+                        <outlet property="lblNombreMascota" destination="ihD-tt-A1c" id="0kY-sc-rRy"/>
+                        <outlet property="lblNombreVeterinario" destination="tpk-JU-CWb" id="Pu2-fe-yX4"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cfk-GC-mHS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="7861.8320610687024" y="1762.6760563380283"/>
+        </scene>
         <!--Nueva Mascota Controller-->
         <scene sceneID="GLb-De-1gO">
             <objects>
@@ -879,7 +1170,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cP7-gh-MGC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7680" y="1192"/>
+            <point key="canvasLocation" x="7862" y="1050"/>
         </scene>
         <!--Actualizar Foto Controller-->
         <scene sceneID="vWu-Ud-qsd">
@@ -1016,7 +1307,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bn0-pe-f4a" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="8446.5648854961837" y="1191.549295774648"/>
+            <point key="canvasLocation" x="8967" y="863"/>
         </scene>
         <!--Detalles Mascota Controller-->
         <scene sceneID="G2p-BI-TNJ">
@@ -1158,14 +1449,96 @@
                     <view key="view" contentMode="scaleToFill" id="dro-El-i3c">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="RMb-h0-Sfq" userLabel="Tv Citas">
+                                <rect key="frame" x="39" y="238" width="318" height="458"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="celda" rowHeight="151" id="8rX-ts-suN" userLabel="Celda" customClass="CeldaCitas" customModule="VitalVet_App" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="50" width="318" height="151"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="8rX-ts-suN" id="WZA-38-gz6">
+                                            <rect key="frame" x="0.0" y="0.0" width="318" height="151"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Fecha y Hora:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Th-YH-eTa">
+                                                    <rect key="frame" x="76" y="50" width="238" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Mascota: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jrQ-NX-vpT">
+                                                    <rect key="frame" x="76" y="21" width="226" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Veterinario:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lhj-YU-qIc">
+                                                    <rect key="frame" x="76" y="79" width="215" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Estado: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DJf-gf-qwk">
+                                                    <rect key="frame" x="76" y="108" width="226" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HT8-wJ-b9h">
+                                                    <rect key="frame" x="0.0" y="41" width="68" height="68"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </imageView>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="imgMascota" destination="HT8-wJ-b9h" id="9L6-fw-nQl"/>
+                                            <outlet property="lblEstado" destination="DJf-gf-qwk" id="DxS-3E-Cam"/>
+                                            <outlet property="lblFechaHora" destination="3Th-YH-eTa" id="HZ5-iR-4WQ"/>
+                                            <outlet property="lblMascota" destination="jrQ-NX-vpT" id="zGg-Sm-a6R"/>
+                                            <outlet property="lblVeterinario" destination="Lhj-YU-qIc" id="YZF-dl-OLz"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="dPo-l9-jGl">
+                                <rect key="frame" x="39" y="189" width="318" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <segments>
+                                    <segment title="First"/>
+                                    <segment title="Second"/>
+                                </segments>
+                                <connections>
+                                    <action selector="cambioFiltro:" destination="BSO-1d-2Jl" eventType="valueChanged" id="Kbz-Rw-KGS"/>
+                                </connections>
+                            </segmentedControl>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="qLf-Q7-sUA"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <navigationItem key="navigationItem" id="OZ6-rD-cIr"/>
+                    <navigationItem key="navigationItem" id="OZ6-rD-cIr">
+                        <nil key="title"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="Kc4-69-Sq7">
+                            <connections>
+                                <action selector="btnAgregarCita:" destination="BSO-1d-2Jl" id="wJm-oH-LXa"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="scFiltroEstado" destination="dPo-l9-jGl" id="wNw-A8-0Zc"/>
+                        <outlet property="tvCitas" destination="RMb-h0-Sfq" id="wsv-Ls-vq3"/>
+                        <segue destination="Hlv-Ld-6hZ" kind="show" identifier="segueSeleccionarVet" id="M7u-TV-PyL"/>
+                        <segue destination="MnE-mK-AzY" kind="show" identifier="segueDatosCita" id="ZYa-Bw-0HO"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zIZ-de-YgF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7094" y="225"/>
+            <point key="canvasLocation" x="7093.8931297709923" y="224.64788732394368"/>
         </scene>
         <!--Mis Consultas View Controller-->
         <scene sceneID="60b-O1-k1W">
@@ -1610,11 +1983,11 @@
             </objects>
             <point key="canvasLocation" x="634" y="-506"/>
         </scene>
-        <!--Citas-->
+        <!--Sistema-->
         <scene sceneID="6Fe-zF-CMz">
             <objects>
                 <navigationController storyboardIdentifier="NavAdminPagos" automaticallyAdjustsScrollViewInsets="NO" id="peH-jO-Wlm" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Citas" image="checkmark.circle" catalog="system" id="AOn-dv-uY4"/>
+                    <tabBarItem key="tabBarItem" title="Sistema" image="checkmark.circle" catalog="system" id="AOn-dv-uY4"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="eb3-q6-7k6">
                         <rect key="frame" x="0.0" y="118" width="393" height="54"/>
@@ -2450,6 +2823,9 @@
         </systemColor>
         <systemColor name="systemIndigoColor">
             <color red="0.34509803919999998" green="0.33725490200000002" blue="0.83921568629999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemRedColor">
+            <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
