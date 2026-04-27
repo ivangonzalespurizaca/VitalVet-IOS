@@ -73,9 +73,18 @@ class ListadoLogSistemaViewController: UIViewControllerProfile, UITableViewDataS
         }
     
     @IBAction func btnFiltrar(_ sender: UIButton) {
-        guard let ini = txtFechaInicio.text, !ini.isEmpty,
-                      let fin = txtFechaFin.text, !fin.isEmpty else { return }
-                cargarDatos(inicio: ini, fin: fin)
+        // Validamos si están vacíos
+            guard let ini = txtFechaInicio.text, !ini.isEmpty,
+                  let fin = txtFechaFin.text, !fin.isEmpty else {
+                
+                // Si falta alguno, lanzamos una alerta
+                let alerta = UIAlertController(title: "Atención", message: "Por favor, selecciona un rango de fechas para buscar.", preferredStyle: .alert)
+                alerta.addAction(UIAlertAction(title: "OK", style: .default))
+                self.present(alerta, animated: true)
+                return
+            }
+            
+            cargarDatos(inicio: ini, fin: fin)
     }
     
     
@@ -134,6 +143,13 @@ class ListadoLogSistemaViewController: UIViewControllerProfile, UITableViewDataS
                     case .success(let logs):
                         self.listaLogs = logs
                         self.tvLogs.reloadData()
+                        
+                        // Si la lista está vacía, avisamos al usuario
+                        if logs.isEmpty {
+                            let alerta = UIAlertController(title: "Sin resultados", message: "No se encontraron logs en el rango de fechas seleccionado.", preferredStyle: .alert)
+                            alerta.addAction(UIAlertAction(title: "Continuar", style: .default))
+                            self.present(alerta, animated: true)
+                        }
                     case .failure(let error):
                         print("Error: \(error)")
                     }
