@@ -32,10 +32,28 @@ class ListadoVeterinariosViewController: UIViewControllerProfile, UITableViewDat
             }
         
         // Foto con Kingfisher
-        let url = URL(string: vet.fotoUrl ?? "")
-        cell.imgVet.kf.setImage(with: url, placeholder: UIImage(systemName: "person.crop.circle.fill"))
+        if var urlStr = vet.fotoUrl {
+            if urlStr.hasPrefix("http://") {
+                urlStr = urlStr.replacingOccurrences(of: "http://", with: "https://")
+            }
+            
+            if let url = URL(string: urlStr) {
+                cell.imgVet.kf.setImage(
+                    with: url,
+                    placeholder: UIImage(systemName: "person.crop.circle.fill"),
+                    options: [.transition(.fade(0.2))]
+                )
+            }
+        } else {
+            cell.imgVet.image = UIImage(systemName: "person.crop.circle.fill")
+        }
+        
+        // Estética de la imagen (Opcional si no lo tienes en el Storyboard)
+        cell.imgVet.layer.cornerRadius = 10
+        cell.imgVet.clipsToBounds = true
         
         return cell
+         
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

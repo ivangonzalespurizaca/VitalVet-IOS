@@ -18,6 +18,11 @@ class UIViewControllerProfile: UIViewController {
         setupHeaderBase()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        actualizarDatosHeader()
+    }
+    
     private func setupHeaderBase() {
         // 1. Configuración de la Foto (Mantenemos a la derecha)
         imgPerfil.frame = CGRect(x: view.frame.width - 70, y: 60, width: 50, height: 50)
@@ -49,8 +54,20 @@ class UIViewControllerProfile: UIViewController {
         let nombre = defaults.string(forKey: "userNombre") ?? "Usuario"
         lblSaludo.text = "¡Hola, \(nombre)!"
         
-        if let urlStr = defaults.string(forKey: "userFotoUrl"), let url = URL(string: urlStr) {
-            imgPerfil.kf.setImage(with: url, placeholder: UIImage(systemName: "person.circle.fill"))
+        if var urlStr = defaults.string(forKey: "userFotoUrl") {
+            if urlStr.hasPrefix("http://") {
+                urlStr = urlStr.replacingOccurrences(of: "http://", with: "https://")
+            }
+            
+            if let url = URL(string: urlStr) {
+                imgPerfil.kf.setImage(
+                    with: url,
+                    placeholder: UIImage(systemName: "person.circle.fill"),
+                    options: [.transition(.fade(0.3))]
+                )
+            }
+        } else {
+            imgPerfil.image = UIImage(systemName: "person.circle.fill")
         }
     }
 
@@ -60,6 +77,8 @@ class UIViewControllerProfile: UIViewController {
     }
 
     @objc func irAEditarPerfil() {
-        print("Navegando a edición de perfil...")
+        if let perfilVC = storyboard?.instantiateViewController(withIdentifier: "PerfilUsuarioViewController") {
+                self.navigationController?.pushViewController(perfilVC, animated: true)
+            }
     }
 }

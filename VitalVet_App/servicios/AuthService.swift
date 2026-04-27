@@ -10,9 +10,13 @@ import Alamofire
 
 class AuthService {
     
+    static let shared = AuthService()
+    
     // 1. Definición de URLs Base
     private let googleURL = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyA6cPVWVts1H5efEXPmYVDyPwaIpIBXpFw"
     private let railwayBaseURL = "https://apiveterinaria-production-238b.up.railway.app/api/public/auth"
+    
+    private let usuariosURL = "https://apiveterinaria-production-238b.up.railway.app/api/usuarios"
         
     func loginYSync(email: String, password: String, completion: @escaping (Result<UsuarioInfoDTO, Error>) -> Void) {
         
@@ -82,6 +86,64 @@ class AuthService {
         }
     }
     
+    func actualizarFoto(userId: String, imagen: UIImage, completion: @escaping (Result<String, Error>) -> Void) {
+        let url = "\(usuariosURL)/\(userId)/foto"
+        guard let imageData = imagen.jpegData(compressionQuality: 0.2) else { return }
+        
+        let token = UserDefaults.standard.string(forKey: "userToken") ?? ""
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(token)",
+            "Accept": "application/json"
+        ]
+        
+        AF.upload(multipartFormData: { multipartFormData in
+            multipartFormData.append(imageData, withName: "file", fileName: "perfil.jpg", mimeType: "image/jpeg")
+        }, to: url, method: .patch, headers: headers).responseData { response in
+            // Debug: Imprime el código de estado para saber qué dice el servidor
+            if let code = response.response?.statusCode {
+                print("Status Code Foto: \(code)")
+            }
+
+            switch response.result {
+            case .success(let data):
+                do {
+                    let decodedResponse = try JSONDecoder().decode(FotoResponse.self, from: data)
+                    UserDefaults.standard.set(decodedResponse.fotoUrl, forKey: "userFotoUrl")
+                    completion(.success(decodedResponse.fotoUrl))
+                } catch {
+                    completion(.failure(error))
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    func actualizarDatosUsuario(userId: String, datos: UsuarioUpdateDTO, completion: @escaping (Bool) -> Void) {
+            let url = "\(usuariosURL)/\(userId)"
+            let token = UserDefaults.standard.string(forKey: "userToken") ?? ""
+            let headers: HTTPHeaders = [
+                "Authorization": "Bearer \(token)",
+                "Content-Type": "application/json"
+            ]
+            
+            AF.request(url, method: .put, parameters: datos, encoder: JSONParameterEncoder.default, headers: headers)
+                .response { [weak self] response in
+                    if let code = response.response?.statusCode, (200...299).contains(code) {
+                        self?.sincronizarConRailway(token: token) { result in
+                            switch result {
+                            case .success:
+                                completion(true)
+                            case .failure:
+                                completion(false)
+                            }
+                        }
+                    } else {
+                        completion(false)
+                    }
+                }
+        }
+    
     private func guardarDatosUsuarioLocal(usuario: UsuarioInfoDTO) {
         let defaults = UserDefaults.standard
         defaults.set(usuario.idUsuario, forKey: "userId")
@@ -92,5 +154,6 @@ class AuthService {
         defaults.set(usuario.celular, forKey: "userCelular")
         defaults.set(usuario.genero, forKey: "userGenero")
         defaults.set(usuario.fotoUrl, forKey: "userFotoUrl")
+        defaults.set(usuario.dni, forKey: "userDni")
     }
 }

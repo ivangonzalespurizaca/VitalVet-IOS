@@ -103,8 +103,16 @@ class EditarVeterinarioViewController: UIViewControllerProfile, UIPickerViewData
         txtEspecialidad.text = vet.especialidad
         swActivo.isOn = vet.activo ?? true
     
-        if let url = URL(string: vet.fotoUrl ?? "") {
-            imgVet.kf.setImage(with: url, placeholder: UIImage(systemName: "person.circle"))
+        if var urlStr = vet.fotoUrl {
+            if urlStr.hasPrefix("http://") {
+                urlStr = urlStr.replacingOccurrences(of: "http://", with: "https://")
+            }
+            
+            if let url = URL(string: urlStr) {
+                imgVet.kf.setImage(with: url, placeholder: UIImage(systemName: "person.circle.fill"))
+            }
+        } else {
+            imgVet.image = UIImage(systemName: "person.circle.fill")
         }
     }
     

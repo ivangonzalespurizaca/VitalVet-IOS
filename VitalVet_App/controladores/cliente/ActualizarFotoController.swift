@@ -87,7 +87,7 @@ class ActualizarFotoController: UIViewControllerProfile, UIImagePickerController
             "Accept": "application/json"
         ]
 
-        guard let imageData = imagen.jpegData(compressionQuality: 0.7) else { return }
+        guard let imageData = imagen.jpegData(compressionQuality: 0.5) else { return }
 
         AF.upload(multipartFormData: { multipartFormData in
             multipartFormData.append(imageData, withName: "archivo", fileName: "mascota_\(idMascota).jpg", mimeType: "image/jpeg")

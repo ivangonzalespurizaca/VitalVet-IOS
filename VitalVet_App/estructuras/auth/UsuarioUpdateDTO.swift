@@ -7,9 +7,15 @@
 
 import UIKit
 
+nonisolated
 struct UsuarioUpdateDTO: Codable {
     let nombres: String
     let apellidos: String
     let celular: String
     let genero: String
+}
+
+nonisolated
+struct FotoResponse: Codable {
+    let fotoUrl: String
 }
