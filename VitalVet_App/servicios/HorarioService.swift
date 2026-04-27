@@ -30,6 +30,26 @@ class HorarioService {
             }
     }
     
+    func listarHorariosDisponibles(idVet: Int, token: String, completion: @escaping (Result<[HorarioInfo], Error>) -> Void) {
+        let url = "\(baseURL)/disponibles/\(idVet)"
+        
+        let headers: HTTPHeaders = [
+            .authorization(bearerToken: token),
+            .accept("application/json")
+        ]
+        
+        AF.request(url, method: .get, headers: headers)
+            .validate()
+            .responseDecodable(of: [HorarioInfo].self) { response in
+                switch response.result {
+                case .success(let horarios):
+                    completion(.success(horarios))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+    }
+    
     func registrarHorario(datos: HorarioRegister, token: String, completion: @escaping (Result<Void, Error>) -> Void) {
         let url = "\(baseURL)/admin"
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]

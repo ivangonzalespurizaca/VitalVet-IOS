@@ -221,24 +221,32 @@ class RegistroConsultaController: UIViewController, UIPickerViewDelegate, UIPick
     func registrarConsultaEnServidor(datos: ConsultaRequest) {
         guard let token = UserDefaults.standard.string(forKey: "userToken") else { return }
         let url = "https://apiveterinaria-production-238b.up.railway.app/api/consultas/registrar"
-        
-        let headers: HTTPHeaders = [
-            "Authorization": "Bearer \(token)",
-            "Accept": "application/json"
-        ]
-        
+        let headers: HTTPHeaders = ["Authorization": "Bearer \(token)", "Accept": "application/json"]
 
         AF.request(url, method: .post, parameters: datos, encoder: JSONParameterEncoder.default, headers: headers)
             .validate()
-            .responseJSON { response in
+            .response { response in
+                // --- BLOQUE DE DEBUG ---
+                if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
+                    print("DEBUG SERVIDOR: \(utf8Text)") // Esto te dirá el error real en la consola
+                }
+                // ------------------------
+
                 DispatchQueue.main.async {
-                
                     switch response.result {
                     case .success:
                         self.notificarExitoYRegresar()
                     case .failure(let error):
-                        print("Error en registro: \(error)")
-                        self.mostrarErrorValidacion(mensaje: "No se pudo registrar la consulta. Intente nuevamente.")
+                        // Intentamos sacar el mensaje real del servidor (como hicimos con las citas)
+                        var mensajeError = "No se pudo registrar la consulta."
+                        
+                        if let data = response.data,
+                           let apiError = try? JSONDecoder().decode(APIError.self, from: data) {
+                            // Buscamos si hay errores específicos en el diccionario 'errors'
+                            mensajeError = apiError.errors?.values.first ?? apiError.message ?? error.localizedDescription
+                        }
+                        
+                        self.mostrarErrorValidacion(mensaje: mensajeError)
                     }
                 }
             }
