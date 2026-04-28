@@ -129,4 +129,36 @@ class CitaService: NSObject {
             }
     }
     
+    func listarCitasPorVeterinario(idVet: String, token: String, completion: @escaping (Result<[CitaInfo], Error>) -> Void) {
+        let url = "\(baseURL)/veterinario/\(idVet)"
+        let headers: HTTPHeaders = [.authorization(bearerToken: token)]
+        
+        AF.request(url, method: .get, headers: headers)
+            .responseDecodable(of: [CitaInfo].self) { response in
+                switch response.result {
+                case .success(let citas):
+                    completion(.success(citas))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+    }
+
+    func aprobarCita(idCita: Int, token: String, completion: @escaping (Result<CitaInfo, Error>) -> Void) {
+        // Según tu Postman: PATCH /api/citas/{id}/estado?nuevoEstado=CONFIRMADA
+        let url = "\(baseURL)/\(idCita)/estado"
+        let parameters: [String: String] = ["nuevoEstado": "CONFIRMADA"]
+        let headers: HTTPHeaders = [.authorization(bearerToken: token)]
+        
+        AF.request(url, method: .patch, parameters: parameters, headers: headers)
+            .validate()
+            .responseDecodable(of: CitaInfo.self) { response in
+                switch response.result {
+                case .success(let cita):
+                    completion(.success(cita))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+    }
 }
