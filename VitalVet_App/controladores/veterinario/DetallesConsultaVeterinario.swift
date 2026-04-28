@@ -1,12 +1,4 @@
-//
-//  DetallesConsultaVeterinario.swift
-//  VitalVet_App
-//
-//  Created by XCODE on 27/04/26.
-//
-
 import UIKit
-
 
 class DetallesConsultaVeterinario: UIViewController {
 

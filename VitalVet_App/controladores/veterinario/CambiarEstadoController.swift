@@ -8,23 +8,23 @@
 import UIKit
 import Alamofire
 
-class CambiarEstadoController: UIViewController, UITableViewDataSource,UITableViewDelegate {
+class CambiarEstadoController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     @IBOutlet weak var tvCarnet: UITableView!
         
-        var idMascota: Int? // Este valor viene del segue anterior
-        var listaVacunas: [VacunaAplicada] = []
+    var idMascota: Int? // Este valor viene del segue anterior
+    var listaVacunas: [VacunaAplicada] = []
 
-        override func viewDidLoad() {
-            super.viewDidLoad()
-            tvCarnet.dataSource = self
-            tvCarnet.delegate = self
-            tvCarnet.rowHeight = 120
-            
-            if let id = idMascota {
-                cargarCarnet(id: id)
-            }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        tvCarnet.dataSource = self
+        tvCarnet.delegate = self
+        tvCarnet.rowHeight = 120
+        
+        if let id = idMascota {
+            cargarCarnet(id: id)
         }
+    }
 
     func cargarCarnet(id: Int) {
         guard let token = UserDefaults.standard.string(forKey: "userToken") else { return }
@@ -49,10 +49,10 @@ class CambiarEstadoController: UIViewController, UITableViewDataSource,UITableVi
             }
     }
         
-        // MARK: - TableView Methods
-        func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            return listaVacunas.count
-        }
+    // MARK: - TableView Methods
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return listaVacunas.count
+    }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "celdaCarnet", for: indexPath) as! CarnetTableViewCell
@@ -66,7 +66,6 @@ class CambiarEstadoController: UIViewController, UITableViewDataSource,UITableVi
             cell.txtFecha.text = aplicada
         } else {
             cell.txtFecha.text = "Fecha a aplicar"
-        
         }
         
         cell.txtEstado.textColor = (vacuna.estado == "APLICADA") ? .systemGreen : .systemOrange
@@ -79,7 +78,6 @@ class CambiarEstadoController: UIViewController, UITableViewDataSource,UITableVi
         
         if vacuna.estado == "APLICADA" {
             performSegue(withIdentifier: "verDetalleAplicada", sender: vacuna)
-            
         } else {
             mostrarAlertaConfirmacion(vacuna: vacuna)
         }
@@ -137,16 +135,13 @@ class CambiarEstadoController: UIViewController, UITableViewDataSource,UITableVi
                 }
             }
     }
-    
-    
-    }
-    
-    extension Date {
-        func toString(format: String = "yyyy-MM-dd") -> String {
-            let formatter = DateFormatter()
-            formatter.dateFormat = format
-            formatter.locale = Locale(identifier: "en_US_POSIX")
-            return formatter.string(from: self)
-        }
-    }
+}
 
+extension Date {
+    func toString(format: String = "yyyy-MM-dd") -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = format
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        return formatter.string(from: self)
+    }
+}
