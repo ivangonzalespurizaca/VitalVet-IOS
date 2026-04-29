@@ -1,7 +1,7 @@
 import UIKit
 import Alamofire
 
-class DetallesMascotaController: UIViewController {
+class DetallesMascotaController: UIViewControllerProfile {
     
     // Outlets (Conéctalos en tu Storyboard)
     @IBOutlet weak var lblNombreVacuna: UILabel!
@@ -18,6 +18,7 @@ class DetallesMascotaController: UIViewController {
         super.viewDidLoad()
         setupUI()
         fetchVacunaDetalle()
+        cambiarTitulo(nuevoTexto: "Detalle de Vacuna")
     }
     
     func setupUI() {
@@ -60,7 +61,7 @@ class DetallesMascotaController: UIViewController {
     
     func updateUI(with vacuna: VacunaElement) {
         lblNombreVacuna.text = vacuna.nombreVacuna
-        lblFecha.text = "\(vacuna.fechaAplicacion)"
+        lblFecha.text = "\(String(describing: vacuna.fechaAplicacion ?? "No registrada"))"
         lblDosis.text = "\(vacuna.nroDosis)"
         lblEstado.text = vacuna.estado
         lblVeterinario.text = "Vet. \(vacuna.nombreVeterinario)"

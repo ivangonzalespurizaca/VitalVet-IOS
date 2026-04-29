@@ -33,8 +33,25 @@ class MisCitasViewController: UIViewControllerProfile, UITableViewDataSource, UI
         }
         
         // Cargar imagen (Si usas Kingfisher)
-        if let url = URL(string: cita.fotoMascotaUrl ?? "") {
-            cell.imgMascota.kf.setImage(with: url)
+        if var urlStr = cita.fotoMascotaUrl {
+            // Forzamos HTTPS si viene como HTTP
+            if urlStr.hasPrefix("http://") {
+                urlStr = urlStr.replacingOccurrences(of: "http://", with: "https://")
+            }
+            
+            if let url = URL(string: urlStr) {
+                cell.imgMascota.kf.setImage(
+                    with: url,
+                    placeholder: UIImage(systemName: "pawprint.circle.fill"),
+                    options: [
+                        .transition(.fade(0.3)), // Aparece con un fundido suave
+                        .cacheOriginalImage     // Guarda en caché para no gastar datos
+                    ]
+                )
+            }
+        } else {
+            // Imagen por defecto si no hay URL
+            cell.imgMascota.image = UIImage(systemName: "pawprint.circle.fill")
         }
         
         return cell

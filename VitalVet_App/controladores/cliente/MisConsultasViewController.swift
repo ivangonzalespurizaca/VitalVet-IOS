@@ -141,10 +141,17 @@ class MisConsultasViewController: UIViewControllerProfile, UITableViewDataSource
         }
 
         func mostrarDetalleConsulta(_ consulta: ConsultaDTO) {
-            let vc = self.storyboard?.instantiateViewController(withIdentifier: "DetalleConsultaViewController") as! DetalleConsultaViewController
-            vc.consulta = consulta
-            self.navigationController?.pushViewController(vc, animated: true)
+            guard let vc = self.storyboard?.instantiateViewController(withIdentifier: "DetalleConsultaViewController") as? DetalleConsultaViewController else {
+                print("❌ No se pudo encontrar el ViewController con ese ID")
+                return
         }
+        
+        // Pasamos el objeto
+        vc.consulta = consulta
+        
+        // Navegamos
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
     
     // MARK: - Mostrar error
        func mostrarError(message: String) {

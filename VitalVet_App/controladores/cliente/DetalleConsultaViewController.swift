@@ -7,7 +7,7 @@
 
 import UIKit
 
-class DetalleConsultaViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class DetalleConsultaViewController: UIViewControllerProfile, UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == tvTratamientos {
                     return tratamientos.count
@@ -32,13 +32,10 @@ class DetalleConsultaViewController: UIViewController, UITableViewDataSource, UI
                 let vacuna = vacunas[indexPath.row]
 
                 cell.lblVacuna.text = "Vacuna: \(vacuna.nombreVacuna)"
-                cell.lblDescripcion.text = "Descripcion: \(vacuna.descripcionVacuna)"
                 cell.lblFechaAplicacion.text = "Fecha Aplicación: \(vacuna.fechaAplicacion)"
-               cell.configurarFechaProgramada(fecha: vacuna.fechaProgramada)
+                cell.configurarFechaProgramada(fecha: vacuna.fechaProgramada)
                 cell.lblNroDosis.text = "Nro. Dosis: \(vacuna.nroDosis)"
                 cell.lblEstado.text = "Estado: \(vacuna.estado)"
-                cell.lblVeterinario.text = "Veterinario: \(vacuna.nombreVeterinario)"
-                cell.lblObservaciones.text = "Observaciones: \(vacuna.observaciones)"
                 
                 return cell
             }
@@ -81,6 +78,8 @@ class DetalleConsultaViewController: UIViewController, UITableViewDataSource, UI
         
         tvTratamientos.rowHeight = 130
         tvVacunas.rowHeight = 180
+        
+        cambiarTitulo(nuevoTexto: "Detalles Consulta")
                 
                 // Mostrar los detalles de la consulta
                 mostrarConsulta()
@@ -88,19 +87,29 @@ class DetalleConsultaViewController: UIViewController, UITableViewDataSource, UI
     }
     
     func mostrarConsulta() {
-        lblDiagnostico.text = "Diagnóstico: \(consulta.diagnostico)"
-        lblFechaConsulta.text = "Fecha Consulta: \(consulta.fechaConsulta)"
-            lblPesoActual.text = "Peso: \(consulta.pesoActual) kg"
-            lblTemperatura.text = "Temperatura: \(consulta.temperatura) °C"
-            lblRecomendaciones.text = "Recomendaciones: \(consulta.recomendaciones ?? "Sin recomendaciones")"
-        lblVeterinario.text = "Veterinario: \(consulta.nombreVeterinario)"
+        // 🛡️ SEGURIDAD: Verificamos que la consulta exista Y que el primer label esté conectado
+            guard let consultaSegura = self.consulta else {
+                print("⚠️ Error: La variable consulta llegó nula")
+                return
+            }
             
-            // Asignamos los tratamientos y vacunas
-            tratamientos = consulta.tratamientos
-            vacunas = consulta.vacunas
-            
-            tvTratamientos.reloadData()
-            tvVacunas.reloadData()
+            // Verificamos si los labels ya fueron creados por el sistema
+            if isViewLoaded && lblDiagnostico != nil {
+                lblDiagnostico.text = "Diagnóstico: \(consultaSegura.diagnostico)"
+                lblFechaConsulta.text = "Fecha Consulta: \(consultaSegura.fechaConsulta)"
+                lblPesoActual.text = "Peso: \(consultaSegura.pesoActual) kg"
+                lblTemperatura.text = "Temperatura: \(consultaSegura.temperatura) °C"
+                lblRecomendaciones.text = "Recomendaciones: \(consultaSegura.recomendaciones ?? "Sin recomendaciones")"
+                lblVeterinario.text = "Veterinario: \(consultaSegura.nombreVeterinario)"
+                
+                // Actualizamos las listas locales
+                self.tratamientos = consultaSegura.tratamientos
+                self.vacunas = consultaSegura.vacunas
+                
+                // Recargamos tablas
+                tvTratamientos.reloadData()
+                tvVacunas.reloadData()
+            }
         }
 
 

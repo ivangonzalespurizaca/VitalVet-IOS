@@ -7,7 +7,7 @@
 
 import UIKit
 
-class RegistrarCitaViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class RegistrarCitaViewController: UIViewControllerProfile, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return listaSlots.count
     }
@@ -44,12 +44,13 @@ class RegistrarCitaViewController: UIViewController, UICollectionViewDataSource,
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        cambiarTitulo(nuevoTexto: "Registrar cita: Paso 2")
         cvSlotHorarios.dataSource = self
         cvSlotHorarios.delegate = self
         lblResumen.text = "Cita con: \(nombreVetRecibido ?? "Vet")"
         dpFecha.minimumDate = Date()
         dpFecha.addTarget(self, action: #selector(fechaCambio), for: .valueChanged)
+        txtMotivo.configurarEstiloVitalVet(icono: "doc.text.magnifyingglass", placeholder: "Motivo de cita")
         fechaCambio()
     }
     

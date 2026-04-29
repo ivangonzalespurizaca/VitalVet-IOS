@@ -29,6 +29,7 @@ class DatosCitaViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configurarDatos()
+        configurarUI() 
     }
     
     func configurarDatos() {
@@ -62,6 +63,30 @@ class DatosCitaViewController: UIViewController {
         // Lógica del botón: Solo habilitar si es cancelable
         let esCancelable = (c.estado == "PENDIENTE" || c.estado == "CONFIRMADA")
         btnCancelar.isHidden = !esCancelable
+    }
+    
+    private func configurarUI() {
+        // 1. Diseño de la imagen (Círculo con borde sutil)
+        imgMascota.layer.cornerRadius = imgMascota.frame.height / 2
+        imgMascota.layer.borderWidth = 3
+        imgMascota.layer.borderColor = UIColor.systemGray6.cgColor
+        imgMascota.clipsToBounds = true
+        
+        // 2. Diseño del Label de Estado (Tipo Badge/Etiqueta)
+        lblEstadoCita.layer.cornerRadius = 8
+        lblEstadoCita.clipsToBounds = true
+        lblEstadoCita.font = .systemFont(ofSize: 14, weight: .bold)
+        // Agregamos un poco de "padding" visual si es posible en tu layout
+        
+        // 3. Estilo del Botón Cancelar
+        btnCancelar.layer.cornerRadius = 12
+        btnCancelar.backgroundColor = .systemRed.withAlphaComponent(0.1)
+        btnCancelar.setTitleColor(.systemRed, for: .normal)
+        btnCancelar.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
+        
+        // 4. Jerarquía visual en textos
+        lblNombreMascota.font = .systemFont(ofSize: 22, weight: .bold)
+        lblNombreVeterinario.font = .systemFont(ofSize: 16, weight: .semibold)
     }
     
     private func configurarColorEstado(_ estado: String) {

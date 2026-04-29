@@ -31,6 +31,9 @@ class NuevaMascotaController: UIViewControllerProfile ,UIPickerViewDelegate, UIP
             super.viewDidLoad()
             pvmascota.delegate = self
             pvmascota.dataSource = self
+            txtnombreMascota.configurarEstiloVitalVet(icono: "pawprint.fill", placeholder: "Nombre de la mascota")
+            txtpeso.configurarEstiloVitalVet(icono: "scalemass.fill", placeholder: "Peso (kg)")
+            txtraza.configurarEstiloVitalVet(icono: "dog.fill", placeholder: "Raza o variedad")
             cambiarTitulo(nuevoTexto: "Nueva Mascota")
             segsexo.setTitle("MACHO", forSegmentAt: 0)
             segsexo.setTitle("HEMBRA", forSegmentAt: 1)

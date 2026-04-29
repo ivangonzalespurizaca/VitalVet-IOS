@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SeleccionarVeterinarioViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDelegate, UITableViewDataSource {
+class SeleccionarVeterinarioViewController: UIViewControllerProfile, UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDelegate, UITableViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
@@ -45,14 +45,16 @@ class SeleccionarVeterinarioViewController: UIViewController, UIPickerViewDelega
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // Asegúrate de que en el Storyboard la celda tenga el ID "celda"
         let cell = tableView.dequeueReusableCell(withIdentifier: "celda", for: indexPath) as! CeldaHorariosDisponibles
         let horario = horariosBase[indexPath.row]
         
         let inicio = horario.horaInicio.prefix(5)
         let fin = horario.horaFin.prefix(5)
         
-        cell.lblFechaHora.text = "\(horario.diaSemana) | \(inicio) - \(fin)"
+        // Diseño de la celda
+        cell.lblFechaHora.text = "\(horario.diaSemana): \(inicio) - \(fin)"
+        // Quitar el color gris al seleccionar
+        cell.selectionStyle = .none
         
         return cell
     }
@@ -76,11 +78,15 @@ class SeleccionarVeterinarioViewController: UIViewController, UIPickerViewDelega
         super.viewDidLoad()
         configurarUI()
         cargarDatosIniciales()
+        cambiarTitulo(nuevoTexto: "Registrar Cita: Paso 1")
     }
     
     private func configurarUI() {
         txtMascota.inputView = pvMascota
         txtVeterinario.inputView = pvVeterinario
+        
+        txtMascota.configurarEstiloVitalVet(icono: "pawprint.fill", placeholder: "Seleccionar Mascota")
+        txtVeterinario.configurarEstiloVitalVet(icono: "person.badge.plus.fill", placeholder: "Seleccionar Veterinario")
         
         pvMascota.delegate = self
         pvVeterinario.delegate = self
@@ -139,9 +145,12 @@ class SeleccionarVeterinarioViewController: UIViewController, UIPickerViewDelega
     }
 
     private func validarBotonSiguiente() {
-        // El botón se habilita solo si ambos objetos están seleccionados
-        btnSiguiente.isEnabled = (mascotaSeleccionada != nil && vetSeleccionado != nil)
-        btnSiguiente.alpha = btnSiguiente.isEnabled ? 1.0 : 0.5
+        let estaListo = (mascotaSeleccionada != nil && vetSeleccionado != nil)
+        
+        UIView.animate(withDuration: 0.3) {
+            self.btnSiguiente.isEnabled = estaListo
+            self.btnSiguiente.alpha = estaListo ? 1.0 : 0.5
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -161,6 +170,7 @@ class SeleccionarVeterinarioViewController: UIViewController, UIPickerViewDelega
         let espacio = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         toolbar.setItems([espacio, btnDone], animated: false)
         textField.inputAccessoryView = toolbar
+        btnDone.tintColor = UIColor.lightGray
     }
 
     @objc func cerrarPicker() {

@@ -1,9 +1,13 @@
 import UIKit
 import Alamofire
+import Kingfisher
 
 class ActualizarFotoController: UIViewControllerProfile, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource {
     
     var idMascota: Int?
+    var imgMascota: String?
+    var urlFotoActual: String?
+    
     @IBOutlet weak var imgPreview: UIImageView!
     @IBOutlet weak var tvvacunas: UITableView!
     
@@ -11,7 +15,12 @@ class ActualizarFotoController: UIViewControllerProfile, UIImagePickerController
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        cambiarTitulo(nuevoTexto: "Actualizar Mascota")
+        cambiarTitulo(nuevoTexto: "Datos de Mascota")
+        
+        // Configuración de UI
+        imgPreview.contentMode = .scaleAspectFill
+        imgPreview.layer.cornerRadius = 15 // Opcional: bordes redondeados
+        imgPreview.clipsToBounds = true
         
         tvvacunas.dataSource = self
         tvvacunas.delegate = self
@@ -19,12 +28,44 @@ class ActualizarFotoController: UIViewControllerProfile, UIImagePickerController
         
         // Estado inicial de la foto
         actualizarMensajeFoto()
-        
+                
+        cargarFotoActual()
+
         if let id = idMascota {
             cargarCarnetVacunas(idMascota: id)
         }
     }
-
+    
+    func cargarFotoActual() {
+        // 1. Validamos que exista el string de la URL (imgMascota es la que recibes del segue)
+        if var urlStr = imgMascota {
+            
+            // 2. TRUCO DE SEGURIDAD: Cambiamos http por https
+            if urlStr.hasPrefix("http://") {
+                urlStr = urlStr.replacingOccurrences(of: "http://", with: "https://")
+            }
+            
+            // 3. Convertimos a objeto URL
+            if let url = URL(string: urlStr) {
+                imgPreview.kf.setImage(
+                    with: url,
+                    placeholder: UIImage(systemName: "pawprint.circle.fill"),
+                    options: [
+                        .transition(.fade(0.3)),
+                        .cacheOriginalImage,
+                        .forceRefresh // Útil para ver el cambio inmediato si acabas de subir una
+                    ]
+                ) { result in
+                    // Quitamos el label de "Selecciona una foto" al cargar con éxito
+                    self.actualizarMensajeFoto()
+                }
+            }
+        } else {
+            // Si no hay ninguna URL, mostramos el estado vacío (placeholder)
+            actualizarMensajeFoto()
+        }
+    }
+    
     // MARK: - Gestión de Imagen
     @IBAction func btnSeleccionarFoto(_ sender: UIButton) {
         let picker = UIImagePickerController()
@@ -153,9 +194,13 @@ class ActualizarFotoController: UIViewControllerProfile, UIImagePickerController
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "celda", for: indexPath) as! celdaVacunas
         let vacuna = listaVacunas[indexPath.row]
-        cell.txtnomvacuna.text = vacuna.nombreVacuna
-        cell.txtveterinario.text = vacuna.nombreVeterinario
-        cell.txtEstado.text = vacuna.estado
+        
+        cell.aplicarDiseno()
+        
+        cell.txtnomvacuna.text = "\(vacuna.nombreVacuna ?? "")"
+        cell.txtveterinario.text = "\(vacuna.nombreVeterinario ?? "")"
+        
+        cell.actualizarEstado(estado: vacuna.estado ?? "")
         return cell
     }
 

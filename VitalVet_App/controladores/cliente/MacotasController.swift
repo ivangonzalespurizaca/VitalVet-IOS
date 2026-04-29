@@ -58,6 +58,7 @@ class MacotasController: UIViewControllerProfile, UICollectionViewDataSource, UI
            let destino = segue.destination as? ActualizarFotoController,
            let mascota = sender as? Mascota {
             destino.idMascota = mascota.idMascota
+            destino.imgMascota = mascota.fotoUrl
         }
     }
     

@@ -10,8 +10,6 @@ import UIKit
 class celdaVacuna: UITableViewCell {
 
     @IBOutlet weak var lblVacuna: UILabel!
-
-    @IBOutlet weak var lblDescripcion: UILabel!
     
     @IBOutlet weak var lblFechaAplicacion: UILabel!
     
@@ -20,10 +18,6 @@ class celdaVacuna: UITableViewCell {
     @IBOutlet weak var lblNroDosis: UILabel!
     
     @IBOutlet weak var lblEstado: UILabel!
-    
-    @IBOutlet weak var lblVeterinario: UILabel!
-    
-    @IBOutlet weak var lblObservaciones: UILabel!
     
     
     override func awakeFromNib() {

@@ -17,6 +17,14 @@ class CeldaCollectionSlotHorario: UICollectionViewCell {
             self.layer.borderWidth = 1
             self.layer.borderColor = UIColor.systemGray5.cgColor
             self.backgroundColor = .systemGray6
+        
+        lblHora.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                lblHora.topAnchor.constraint(equalTo: self.topAnchor, constant: 8),
+                lblHora.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -8),
+                lblHora.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 12),
+                lblHora.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -12)
+            ])
         }
     
     func configurarSeleccion(estaSeleccionado: Bool, esDisponible: Bool) {
