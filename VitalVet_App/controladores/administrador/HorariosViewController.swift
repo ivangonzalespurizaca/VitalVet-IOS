@@ -14,12 +14,16 @@ class HorariosViewController: UIViewControllerProfile, UITableViewDelegate, UITa
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tvHorarios.dequeueReusableCell(withIdentifier: "celda", for: indexPath) as! CeldaHorarios
+        // 1. Intentamos obtener la celda personalizada
+        guard let cell = tvHorarios.dequeueReusableCell(withIdentifier: "celda", for: indexPath) as? CeldaHorarios else {
+            return UITableViewCell()
+        }
+            
+        // 2. Obtenemos el objeto de la lista
         let horario = listaHorarios[indexPath.row]
         
-        cell.lblDiaHora.text = "\(horario.diaSemana): \(horario.horaInicio) - \(horario.horaFin)"
-        cell.lblEstado.text = horario.activo ? "Estado: Activo" : "Estado: Inactivo"
-        cell.lblEstado.textColor = horario.activo ? .systemGreen : .systemRed
+        // 3. LLAMAMOS AL MÉTODO ÚNICO (Aquí se aplica todo el diseño)
+        cell.configurar(con: horario)
         
         return cell
     }
@@ -45,6 +49,7 @@ class HorariosViewController: UIViewControllerProfile, UITableViewDelegate, UITa
         let vet = listaVets[row]
         vetSeleccionado = vet
         txtVeterinario.text = "\(vet.nombres) \(vet.apellidos)"
+        self.view.endEditing(true)
     }
     
     var listaVets: [VeterinarioInfo] = []
@@ -60,12 +65,23 @@ class HorariosViewController: UIViewControllerProfile, UITableViewDelegate, UITa
     override func viewDidLoad() {
         super.viewDidLoad()
         cambiarTitulo(nuevoTexto: "Gestionar Horarios")
+        self.imgPerfil.isHidden = true
         
         tvHorarios.delegate = self
         tvHorarios.dataSource = self
         pvVeterinario.delegate = self
         pvVeterinario.dataSource = self
-        tvHorarios.rowHeight = 60
+        
+        pvVeterinario.isHidden = true
+        
+        // 1. Configurar Estilo con Icono (person.badge.plus o person.fill)
+        txtVeterinario.configurarEstiloVitalVet(icono: "person.text.rectangle.fill", placeholder: "Seleccionar Veterinario")
+        
+        // 2. Bloquear edición manual y asignar el Picker como teclado
+        txtVeterinario.inputView = pvVeterinario
+        txtVeterinario.tintColor = .clear
+        
+        tvHorarios.rowHeight = 80
         cargarVeterinarios()
     }
     
@@ -85,10 +101,6 @@ class HorariosViewController: UIViewControllerProfile, UITableViewDelegate, UITa
                 self?.listaVets = vets
                 DispatchQueue.main.async {
                     self?.pvVeterinario.reloadAllComponents()
-                    if !vets.isEmpty {
-                        self?.vetSeleccionado = vets[0]
-                        self?.txtVeterinario.text = "\(vets[0].nombres) \(vets[0].apellidos)"
-                    }
                 }
             }
         }

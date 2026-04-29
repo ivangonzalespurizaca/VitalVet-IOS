@@ -55,14 +55,8 @@ class HorarioService {
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
         
         AF.request(url, method: .post, parameters: datos, encoder: JSONParameterEncoder.default, headers: headers)
-            .validate()
-            .response { response in
-                switch response.result {
-                case .success:
-                    completion(.success(()))
-                case .failure(let error):
-                    completion(.failure(error))
-                }
+            .responseVitalVet{ result in
+                completion(result)
             }
     }
     

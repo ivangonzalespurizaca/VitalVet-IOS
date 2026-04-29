@@ -1,22 +1,21 @@
 import UIKit
 import Alamofire
 
-class RegistroConsultaController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+class RegistroConsultaController: UIViewControllerProfile, UIPickerViewDelegate, UIPickerViewDataSource {
 
     @IBOutlet weak var pickerCitas: UIPickerView!
     @IBOutlet weak var viewFormulario: UIView!
-    
     @IBOutlet weak var txtPeso: UITextField!
     @IBOutlet weak var txtTemperatura: UITextField!
     @IBOutlet weak var txtDiagnostico: UITextView!
     @IBOutlet weak var txtRecomendaciones: UITextView!
     @IBOutlet weak var lblContadorTratamientos: UILabel!
     @IBOutlet weak var lblContadorVacunas: UILabel!
-
-  
+    @IBOutlet weak var pvCita: UIPickerView!
+    @IBOutlet weak var txtCita: UITextField!
+    
     var listaCitas: [CitaConfirmada] = []
     var todasLasVacunas: [VacunaDisponible] = []
-    
     var citaSeleccionada: CitaConfirmada?
     var tratamientosAgregados: [TratamientoRequest] = []
     var vacunasAgregadas: [VacunaRequest] = []
@@ -28,12 +27,56 @@ class RegistroConsultaController: UIViewController, UIPickerViewDelegate, UIPick
         
         pickerCitas.delegate = self
         pickerCitas.dataSource = self
-
+        cambiarTitulo(nuevoTexto: "Registrar Consulta")
         viewFormulario.isHidden = true
-        
-        // Cargar ambos datos al iniciar
+        configurarInterfaz()
         cargarCitasDesdeAPI()
         cargarCatalogoVacunas()
+        configurarPickerInferior()
+    }
+    
+    private func configurarInterfaz() {
+        // Iconos para los campos de texto
+        txtPeso.configurarEstiloVitalVet(icono: "scalemass.fill", placeholder: "Peso")
+        txtTemperatura.configurarEstiloVitalVet(icono: "thermometer.medium", placeholder: "Temperatura")
+        txtCita.configurarEstiloVitalVet(icono: "calendar.badge.plus", placeholder: "Seleccionar Cita")
+        txtDiagnostico.configurarEstiloVitalVet(placeholder: "Diagnostico")
+        txtRecomendaciones.configurarEstiloVitalVet(placeholder: "Recomendaciones")
+        // Formato a los TextViews
+//        txtDiagnostico.layer.cornerRadius = 8
+//        txtDiagnostico.layer.borderWidth = 0.5
+//        txtDiagnostico.layer.borderColor = UIColor.systemGray4.cgColor
+//        
+//        txtRecomendaciones.layer.cornerRadius = 8
+//        txtRecomendaciones.layer.borderWidth = 0.5
+//        txtRecomendaciones.layer.borderColor = UIColor.systemGray4.cgColor
+    }
+    
+    private func configurarPickerInferior() {
+        pickerCitas.delegate = self
+        pickerCitas.dataSource = self
+        
+        // Creamos una barra de herramientas (Toolbar) con botón "Listo"
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        let btnListo = UIBarButtonItem(title: "Listo", style: .prominent, target: self, action: #selector(cerrarPicker))
+        let espacio = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        toolbar.setItems([espacio, btnListo], animated: false)
+        
+        // ASIGNACIÓN MÁGICA: El picker ahora es el "teclado" del campo de texto
+        txtCita.inputView = pickerCitas
+        txtCita.inputAccessoryView = toolbar
+        btnListo.tintColor = UIColor.lightGray
+        // Evitar que el usuario escriba manualmente
+        txtCita.tintColor = .clear
+    }
+
+    @objc func cerrarPicker() {
+        view.endEditing(true)
+        if citaSeleccionada == nil && !listaCitas.isEmpty {
+            // Seleccionar el primero por defecto si no ha movido el picker
+            seleccionarFila(0)
+        }
     }
 
     // MARK: - Carga de Datos (GET)
@@ -110,7 +153,7 @@ class RegistroConsultaController: UIViewController, UIPickerViewDelegate, UIPick
         present(alert, animated: true)
     }
     func mostrarErrorValidacion(mensaje: String) {
-        let alerta = UIAlertController(title: "Faltan datos", message: mensaje, preferredStyle: .alert)
+        let alerta = UIAlertController(title: "Error en datos", message: mensaje, preferredStyle: .alert)
         alerta.addAction(UIAlertAction(title: "Entendido", style: .default))
         self.present(alerta, animated: true)
     }
@@ -167,17 +210,18 @@ class RegistroConsultaController: UIViewController, UIPickerViewDelegate, UIPick
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return "\(listaCitas[row].nombreMascota) (\(listaCitas[row].hora))"
     }
+    
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        self.citaSeleccionada = listaCitas[row]
-        
-        // Limpiar listas y labels al cambiar de paciente
+        let cita = listaCitas[row]
+        self.citaSeleccionada = cita
+        self.txtCita.text = "\(cita.nombreMascota) (\(cita.hora))"
         self.tratamientosAgregados.removeAll()
         self.vacunasAgregadas.removeAll()
-        self.lblContadorTratamientos.text = "Sin tratamientos"
-        self.lblContadorVacunas.text = "Sin vacunas"
-        
-        UIView.animate(withDuration: 0.3) {
+        self.lblContadorTratamientos.text = "0 tratamientos listos"
+        self.lblContadorVacunas.text = "0 vacunas listas"
+        UIView.animate(withDuration: 0.5) {
             self.viewFormulario.isHidden = false
+            self.viewFormulario.alpha = 1
         }
     }
     
@@ -215,41 +259,38 @@ class RegistroConsultaController: UIViewController, UIPickerViewDelegate, UIPick
             vacunas: self.vacunasAgregadas
         )
 
-        registrarConsultaEnServidor(datos: consultaFinal)
-    }
-
-    func registrarConsultaEnServidor(datos: ConsultaRequest) {
-        guard let token = UserDefaults.standard.string(forKey: "userToken") else { return }
-        let url = "https://apiveterinaria-production-238b.up.railway.app/api/consultas/registrar"
-        let headers: HTTPHeaders = ["Authorization": "Bearer \(token)", "Accept": "application/json"]
-
-        AF.request(url, method: .post, parameters: datos, encoder: JSONParameterEncoder.default, headers: headers)
-            .validate()
-            .response { response in
-                // --- BLOQUE DE DEBUG ---
-                if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
-                    print("DEBUG SERVIDOR: \(utf8Text)") // Esto te dirá el error real en la consola
-                }
-                // ------------------------
-
-                DispatchQueue.main.async {
-                    switch response.result {
-                    case .success:
-                        self.notificarExitoYRegresar()
-                    case .failure(let error):
-                        // Intentamos sacar el mensaje real del servidor (como hicimos con las citas)
-                        var mensajeError = "No se pudo registrar la consulta."
-                        
-                        if let data = response.data,
-                           let apiError = try? JSONDecoder().decode(APIError.self, from: data) {
-                            // Buscamos si hay errores específicos en el diccionario 'errors'
-                            mensajeError = apiError.errors?.values.first ?? apiError.message ?? error.localizedDescription
-                        }
-                        
-                        self.mostrarErrorValidacion(mensaje: mensajeError)
-                    }
+        sender.isEnabled = false
+        self.view.endEditing(true)
+        
+        ConsultaService.shared.registrarConsultaEnServidor(datos: consultaFinal) { [weak self] resultado in
+            DispatchQueue.main.async {
+                sender.isEnabled = true
+                
+                switch resultado {
+                case .success:
+                    self?.notificarExitoYRegresar()
+                case .failure(let error):
+                    // Tu extensión responseVitalVet ya nos devuelve el error mapeado aquí
+                    self?.mostrarErrorValidacion(mensaje: error.localizedDescription)
                 }
             }
+        }
+    }
+    
+    private func seleccionarFila(_ row: Int) {
+        let cita = listaCitas[row]
+        self.citaSeleccionada = cita
+        txtCita.text = "\(cita.nombreMascota) (\(cita.hora))"
+        
+        // Limpiar datos previos
+        self.tratamientosAgregados.removeAll()
+        self.vacunasAgregadas.removeAll()
+        self.lblContadorTratamientos.text = "Sin tratamientos"
+        self.lblContadorVacunas.text = "Sin vacunas"
+        
+        UIView.animate(withDuration: 0.5) {
+            self.viewFormulario.isHidden = false
+        }
     }
     
     func notificarExitoYRegresar() {

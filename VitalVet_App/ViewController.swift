@@ -12,19 +12,30 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var txtEmail: UITextField!
     @IBOutlet weak var txtContrasenia: UITextField!
+    @IBOutlet weak var imgLogo: UIImageView!
     
     let authService = AuthService()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        //txtContrasenia.isSecureTextEntry = true
+        
+        txtEmail.placeholder = "Correo electrónico"
+        txtContrasenia.placeholder = "Contraseña"
+        txtContrasenia.isSecureTextEntry = true
+        
+        txtEmail.configurarEstiloVitalVet(icono: "envelope.fill", placeholder: "Correo electrónico")
+        txtContrasenia.configurarEstiloVitalVet(icono: "lock.fill", placeholder: "Contraseña")
+        
+        imgLogo.image = UIImage(named: "logotipo")
+        imgLogo.contentMode = .scaleAspectFit
     }
     
     @IBAction func btnIniciarSesion(_ sender: Any) {
         // A. Validar que los campos no estén vacíos
         guard let email = txtEmail.text, !email.isEmpty,
               let password = txtContrasenia.text, !password.isEmpty else {
-            print("Por favor completa todos los campos.")
+            
+            mostrarAlerta(mensaje: "Por favor completa todos los campos")
             return
         }
             

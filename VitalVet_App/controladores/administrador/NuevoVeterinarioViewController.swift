@@ -19,17 +19,48 @@ class NuevoVeterinarioViewController: UIViewControllerProfile, UIPickerViewDeleg
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        cambiarTitulo(nuevoTexto: "Datos Personales")
+        cambiarTitulo(nuevoTexto: "Parte 1 de 2")
         
-        // Configuración básica del Picker
+        // 1. Configurar Iconos y Estilo
+        txtNombre.configurarEstiloVitalVet(icono: "person.fill", placeholder: "Nombres")
+        txtApellido.configurarEstiloVitalVet(icono: "person.2.fill", placeholder: "Apellidos")
+        txtDNI.configurarEstiloVitalVet(icono: "doc.text.fill", placeholder: "Documento de Identidad (DNI)")
+        txtGenero.configurarEstiloVitalVet(icono: "person.and.arrow.left.and.arrow.right", placeholder: "Género")
+        
+        // 2. Configuración del Picker de Género
         pvGenero.delegate = self
         pvGenero.dataSource = self
-        // Llamada al servicio para traer los géneros desde Railway
+        txtGenero.inputView = pvGenero // El picker será el teclado
+        txtGenero.tintColor = .clear   // Ocultar el cursor de escritura
+        
+        // 3. Barra de herramientas para el Picker
+        configurarToolbar(para: txtGenero)
+        
         cargarGenerosDesdeAPI()
         
-        // Configurar gesto para cerrar el teclado/picker al tocar fuera
+        // 4. Gesto para cerrar teclado
         let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
         self.view.addGestureRecognizer(tap)
+    }
+    
+    private func configurarToolbar(para textField: UITextField) {
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        
+        let btnDone = UIBarButtonItem(title: "Hecho", style: .prominent, target: self, action: #selector(cerrarPicker))
+        let espacio = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        btnDone.tintColor = UIColor.lightGray
+        
+        toolbar.setItems([espacio, btnDone], animated: false)
+        textField.inputAccessoryView = toolbar
+    }
+
+    @objc func cerrarPicker() {
+        // Si cierran sin mover el picker, asignamos el primer valor por defecto
+        if txtGenero.text?.isEmpty ?? true && !listaGeneros.isEmpty {
+            txtGenero.text = listaGeneros[0]
+        }
+        view.endEditing(true)
     }
 
     func cargarGenerosDesdeAPI() {

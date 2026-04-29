@@ -49,6 +49,12 @@ class EditarPerfilViewController: UIViewControllerProfile, PHPickerViewControlle
         cambiarTitulo(nuevoTexto: "Editar Perfil")
         self.imgPerfil.isHidden = true
         
+        txtCorreo.configurarEstiloVitalVet(icono: "envelope.fill", placeholder: "Correo")
+        txtDni.configurarEstiloVitalVet(icono: "person.text.rectangle.fill", placeholder: "DNI")
+        txtNombres.configurarEstiloVitalVet(icono: "person.fill", placeholder: "Nombres")
+        txtApellidos.configurarEstiloVitalVet(icono: "person.2.fill", placeholder: "Apellidos")
+        txtCelular.configurarEstiloVitalVet(icono: "phone.fill", placeholder: "Celular")
+        
         cargarDatosActuales()
         configurarUI()
     }

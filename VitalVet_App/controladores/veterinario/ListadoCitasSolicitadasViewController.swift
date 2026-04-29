@@ -41,12 +41,12 @@ class ListadoSolicitudCitasViewController: UIViewControllerProfile, UITableViewD
         cambiarTitulo(nuevoTexto: "Solicitud de Citas")
         
         // Configuración básica de la tabla
-                tvSolicitudes.dataSource = self
-                tvSolicitudes.delegate = self
+        tvSolicitudes.dataSource = self
+        tvSolicitudes.delegate = self
         tvSolicitudes.rowHeight = 200
-                
-                // Cargar las citas desde el servidor
-                cargarCitas()
+        tvSolicitudes.separatorStyle = .none
+        // Cargar las citas desde el servidor
+        cargarCitas()
      
     }
     

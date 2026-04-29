@@ -35,14 +35,8 @@ class VeterinarioService {
         ]
 
         AF.request(baseURL, method: .post, parameters: datos, encoder: JSONParameterEncoder.default, headers: headers)
-            .validate()
-            .response { response in
-                switch response.result {
-                case .success:
-                    completion(.success(()))
-                case .failure(let error):
-                    completion(.failure(error))
-                }
+            .responseVitalVet{ result in
+                completion(result)
             }
     }
     
@@ -55,13 +49,8 @@ class VeterinarioService {
 
         AF.request(url, method: .put, parameters: datos, encoder: JSONParameterEncoder.default, headers: headers)
             .validate()
-            .response { response in
-                switch response.result {
-                case .success:
-                    completion(.success(()))
-                case .failure(let error):
-                    completion(.failure(error))
-                }
+            .responseVitalVet{ result in
+                completion(result)
             }
     }
 }

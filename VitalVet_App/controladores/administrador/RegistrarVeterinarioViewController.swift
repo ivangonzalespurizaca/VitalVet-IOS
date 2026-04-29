@@ -39,10 +39,24 @@ class RegistrarVeterinarioViewController: UIViewControllerProfile, UIPickerViewD
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        cambiarTitulo(nuevoTexto: "Nuevo Veterinario")
+        cambiarTitulo(nuevoTexto: "Parte 2 de 2")
         
+        // Configuración de delegados del Picker
         pvEspecialidad.delegate = self
         pvEspecialidad.dataSource = self
+        
+        // 1. Configurar Iconos y Estilo (SF Symbols)
+        txtEmail.configurarEstiloVitalVet(icono: "envelope.fill", placeholder: "Correo Electrónico")
+        txtCelular.configurarEstiloVitalVet(icono: "phone.fill", placeholder: "Número de Celular")
+        txtEspecialidad.configurarEstiloVitalVet(icono: "briefcase.fill", placeholder: "Seleccionar Especialidad")
+        txtColegiatura.configurarEstiloVitalVet(icono: "person.text.rectangle.fill", placeholder: "Número de Colegiatura (CMVP)")
+        
+        // 2. Asignar Picker como entrada para Especialidad y ocultar cursor
+        txtEspecialidad.inputView = pvEspecialidad
+        txtEspecialidad.tintColor = .clear
+        
+        // 3. Agregar Toolbar para poder cerrar el Picker
+        configurarToolbar(para: txtEspecialidad)
         
         cargarEspecialidades()
     }
@@ -68,11 +82,12 @@ class RegistrarVeterinarioViewController: UIViewControllerProfile, UIPickerViewD
         // 1. Registro en Firebase Auth
         Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
             if let error = error {
-                print("Error Firebase: \(error.localizedDescription)")
+                self.mostrarAlerta(mensaje: "Error Firebase: \(error.localizedDescription)", title: "Error")
                 return
             }
 
-            guard let uid = authResult?.user.uid else { return }
+            guard let user = authResult?.user else { return }
+            let uid = user.uid
 
             // 2. Registro en Railway con el UID de Firebase
             let datosFinales = VeterinarioRegister(
@@ -97,11 +112,41 @@ class RegistrarVeterinarioViewController: UIViewControllerProfile, UIPickerViewD
                     }
                     alerta.addAction(accionOk)
                     self.present(alerta, animated: true)
-                case .failure(let error):
-                    self.mostrarAlerta(mensaje: "Error Railway: \(error.localizedDescription)", title: "Error")
+                    case .failure(let error):
+                    user.delete { errorDelete in
+                        if let errorDelete = errorDelete {
+                            print("Error crítico: No se pudo limpiar Firebase -> \(errorDelete.localizedDescription)")
+                        } else {
+                            print("Rollback exitoso: Usuario de Firebase eliminado para mantener consistencia.")
+                        }
+                        
+                        // Mostramos el error original de Railway al usuario
+                        self.mostrarAlerta(mensaje: "No se pudo completar el registro médico: \(error.localizedDescription)", title: "Error de Servidor")
+                    }
                 }
             }
         }
+    }
+    
+    private func configurarToolbar(para textField: UITextField) {
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        
+        // Estilo de la barra (puedes usar el azul de tu app)
+        toolbar.barTintColor = .white
+        toolbar.isTranslucent = false
+        
+        let btnDone = UIBarButtonItem(title: "Hecho", style: .prominent, target: self, action: #selector(cerrarPicker))
+        let espacio = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        
+        btnDone.tintColor = UIColor.lightGray
+        
+        toolbar.setItems([espacio, btnDone], animated: false)
+        textField.inputAccessoryView = toolbar
+    }
+
+    @objc func cerrarPicker() {
+        view.endEditing(true)
     }
     
     private func mostrarAlerta(mensaje: String, title: String) {

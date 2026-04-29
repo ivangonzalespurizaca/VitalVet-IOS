@@ -8,7 +8,7 @@
 import UIKit
 import FirebaseAuth
 
-class RegistroPerfilViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+class RegistroPerfilViewController: UIViewControllerProfile, UIPickerViewDelegate, UIPickerViewDataSource {
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
@@ -25,8 +25,9 @@ class RegistroPerfilViewController: UIViewController, UIPickerViewDelegate, UIPi
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         txtGenero.text = listaGeneros[row]
         self.view.endEditing(true)
+        
+        
     }
-    
     
     @IBOutlet weak var txtNombre: UITextField!
     @IBOutlet weak var txtApellido: UITextField!
@@ -47,19 +48,51 @@ class RegistroPerfilViewController: UIViewController, UIPickerViewDelegate, UIPi
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        pvGenero.isHidden = true
         pvGenero.delegate = self
         pvGenero.dataSource = self
+        txtGenero.inputView = pvGenero
+        txtGenero.tintColor = .clear
         cargarGeneros()
+        
+        cambiarTitulo(nuevoTexto: "Paso 2 de 2")
+        self.imgPerfil.isHidden = true
+        
+        txtNombre.configurarEstiloVitalVet(
+                icono: "person.fill",
+                placeholder: "Nombres"
+            )
+            
+        txtApellido.configurarEstiloVitalVet(
+            icono: "person.2.fill",
+            placeholder: "Apellidos"
+        )
+        
+        txtDNI.configurarEstiloVitalVet(
+            icono: "person.text.rectangle.fill",
+            placeholder: "DNI (8 dígitos)"
+        )
+        
+        txtCelular.configurarEstiloVitalVet(
+            icono: "phone.fill",
+            placeholder: "Celular"
+        )
+        
+        txtGenero.configurarEstiloVitalVet(
+            icono: "person.and.arrow.left.and.arrow.right",
+            placeholder: "Selecciona tu Género"
+        )
+        
+        // Para que el DNI y Celular solo muestren teclado numérico
+        txtDNI.keyboardType = .numberPad
+        txtCelular.keyboardType = .numberPad
     }
     
     @IBAction func btnFinalizarRegistro(_ sender: Any) {
-        // Validar datos
         guard let datosExtraidos = validarCampos() else { return }
-        
         crearUsuarioEnFirebase(datos: datosExtraidos)
     }
 
-    // MARK: - Pasos del Registro (Funciones Pequeñas)
 
     private func crearUsuarioEnFirebase(datos: (email: String, pass: String, nombre: String, apellido: String, dni: String, cel: String, gen: String)) {
         
@@ -98,16 +131,10 @@ class RegistroPerfilViewController: UIViewController, UIPickerViewDelegate, UIPi
     }
 
     private func enviarARailway(dto: UsuarioRegisterDTO) {
-        print("Paso 3: Registrando y Sincronizando...")
-        
-        // El servicio ahora hace todo: Registra, Sincroniza con Railway y Guarda en UserDefaults
         authService.registrarYPersistir(datos: dto) { resultado in
             DispatchQueue.main.async {
                 switch resultado {
-                case .success(let usuario):
-                    print("Todo listo: \(usuario.nombres) guardado en sesión.")
-                    
-                    // Mostramos alerta de éxito antes de navegar
+                case .success(_):
                     let alerta = UIAlertController(title: "VitalVet", message: "¡Cuenta creada con éxito!", preferredStyle: .alert)
                     alerta.addAction(UIAlertAction(title: "Entrar", style: .default) { _ in
                         self.irAlHomeCliente()
@@ -116,6 +143,14 @@ class RegistroPerfilViewController: UIViewController, UIPickerViewDelegate, UIPi
                     
                 case .failure(let error):
                     self.mostrarAlerta(mensaje: error.localizedDescription)
+                    
+                    Auth.auth().currentUser?.delete { errorDelete in
+                        if let errorDelete = errorDelete {
+                            print("No se pudo limpiar Firebase: \(errorDelete.localizedDescription)")
+                        } else {
+                            print("Firebase limpio. El usuario puede intentar corregir sus datos.")
+                        }
+                    }
                 }
             }
         }
@@ -149,6 +184,19 @@ class RegistroPerfilViewController: UIViewController, UIPickerViewDelegate, UIPi
             self.mostrarAlerta(mensaje: "Completa todos los campos")
             return nil
         }
+        
+        // 2. Validación de longitud de DNI (Perú: 8 dígitos)
+        if dni.count != 8 {
+            self.mostrarAlerta(mensaje: "El DNI debe tener exactamente 8 dígitos.")
+            return nil
+        }
+            
+        // 3. Validación de longitud de Celular (Perú: 9 dígitos)
+        if cel.count != 9 {
+            self.mostrarAlerta(mensaje: "El número de celular debe tener exactamente 9 dígitos.")
+            return nil
+        }
+        
         return (email, pass, nom, ape, dni, cel, gen)
     }
     

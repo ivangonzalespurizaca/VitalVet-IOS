@@ -65,7 +65,7 @@ class CambiarEstadoController: UIViewController, UITableViewDataSource, UITableV
         if let aplicada = vacuna.fechaAplicacion, !aplicada.isEmpty {
             cell.txtFecha.text = aplicada
         } else {
-            cell.txtFecha.text = "Fecha a aplicar"
+            cell.txtFecha.text = "Fecha a aplicar \(vacuna.fechaProgramada ?? "")"
         }
         
         cell.txtEstado.textColor = (vacuna.estado == "APLICADA") ? .systemGreen : .systemOrange
@@ -76,9 +76,7 @@ class CambiarEstadoController: UIViewController, UITableViewDataSource, UITableV
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vacuna = listaVacunas[indexPath.row]
         
-        if vacuna.estado == "APLICADA" {
-            performSegue(withIdentifier: "verDetalleAplicada", sender: vacuna)
-        } else {
+        if vacuna.estado == "PROGRAMADA" {
             mostrarAlertaConfirmacion(vacuna: vacuna)
         }
     }

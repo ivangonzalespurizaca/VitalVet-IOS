@@ -1,0 +1,21 @@
+{
+  "images" : [
+    {
+      "filename" : "vaccination-silhouette-icon-vaccination-permission-concept-syringe-with-check-mark-yes-of-vaccine-illustration-vector.jpg",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

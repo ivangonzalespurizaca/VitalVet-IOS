@@ -42,20 +42,42 @@ class EditarVeterinarioViewController: UIViewControllerProfile, UIPickerViewData
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // 1. Configurar Título y Pickers
+        cambiarTitulo(nuevoTexto: "Editar Veterinario")
         pvEspecialidad.delegate = self
         pvEspecialidad.dataSource = self
-        cambiarTitulo(nuevoTexto: "Editar Veterinario")
-        cargarEspecialidades()
         txtEspecialidad.inputView = pvEspecialidad
+        
+        // 2. Configurar Iconos y Estilo VitalVet
+        // Usamos 'briefcase.fill' para especialidad y 'idcard.fill' para colegiatura
+        txtEspecialidad.configurarEstiloVitalVet(icono: "briefcase.fill", placeholder: "Especialidad")
+        txtNumeroColegiatura.configurarEstiloVitalVet(icono: "person.text.rectangle.fill", placeholder: "Nro. Colegiatura")
+        
+        // 3. Estética de la imagen (Círculo)
+        configurarImagenPerfil()
+        
+        // 4. Barras de herramientas y carga de datos
+        configurarToolbar(para: txtEspecialidad)
+        cargarEspecialidades()
         completarCampos()
-
+        
+        // 5. Ocultar cursor en especialidad
+        txtEspecialidad.tintColor = .clear
+    }
+    
+    private func configurarImagenPerfil() {
+        imgVet.layer.cornerRadius = imgVet.frame.height / 2
+        imgVet.clipsToBounds = true
+        imgVet.contentMode = .scaleAspectFill
+        imgVet.layer.borderWidth = 2
+        imgVet.layer.borderColor = UIColor.systemBlue.withAlphaComponent(0.3).cgColor
     }
     
     @IBAction func btnGuardar(_ sender: Any) {
-        // 1. Validamos que tengamos al veterinario y el token de sesión
         guard let vet = veterinarioSeleccionado,
               let token = UserDefaults.standard.string(forKey: "userToken") else {
-            print("Error: No hay datos del veterinario o token.")
+            self.mostrarAlerta(mensaje: "Sesión expirada o datos incompletos. Intente reingresar.", title: "Atención")
             return
         }
 
@@ -65,15 +87,19 @@ class EditarVeterinarioViewController: UIViewControllerProfile, UIPickerViewData
             activo: swActivo.isOn
         )
 
+        // Mostrar un indicador de carga si tienes uno (opcional)
         VeterinarioService.shared.actualizarVeterinario(id: vet.idVeterinario!, datos: datosActualizados, token: token) { [weak self] resultado in
             
-            // Siempre volvemos al hilo principal para tocar la interfaz
             DispatchQueue.main.async {
                 switch resultado {
                 case .success:
                     self?.mostrarAlertaExito()
+                    
                 case .failure(let error):
-                    print("Error al actualizar: \(error.localizedDescription)")
+                    // Extraemos el mensaje del NSError o del enum de error
+                    let mensajeError = error.localizedDescription
+                    self?.mostrarAlerta(mensaje: mensajeError, title: "No se pudo actualizar")
+                    print("DEBUG: Error al actualizar -> \(mensajeError)")
                 }
             }
         }
@@ -90,6 +116,12 @@ class EditarVeterinarioViewController: UIViewControllerProfile, UIPickerViewData
         present(alerta, animated: true)
     }
     
+    private func mostrarAlerta(mensaje: String, title: String) {
+        let alerta = UIAlertController(title: title, message: mensaje, preferredStyle: .alert)
+        alerta.addAction(UIAlertAction(title: "OK", style: .default))
+        self.present(alerta, animated: true)
+    }
+    
     func completarCampos() {
         // Verificamos que el objeto no sea nulo
         guard let vet = veterinarioSeleccionado else { return }
@@ -97,7 +129,7 @@ class EditarVeterinarioViewController: UIViewControllerProfile, UIPickerViewData
         // Llenamos los labels (Datos fijos)
         lblNombresCompletos.text = "\(vet.nombres) \(vet.apellidos)"
         lblDni.text = "DNI: \(vet.dni)"
-        lblEmail.text = "EMAIL: \(vet.email)"
+        lblEmail.text = vet.email
         // Llenamos los campos para editar
         txtNumeroColegiatura.text = vet.numColegiatura
         txtEspecialidad.text = vet.especialidad
@@ -124,6 +156,21 @@ class EditarVeterinarioViewController: UIViewControllerProfile, UIPickerViewData
                 DispatchQueue.main.async { self?.pvEspecialidad.reloadAllComponents() }
             }
         }
+    }
+    
+    private func configurarToolbar(para textField: UITextField) {
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        
+        let btnDone = UIBarButtonItem(title: "Hecho", style: .prominent, target: self, action: #selector(cerrarPicker))
+        let espacio = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        
+        toolbar.setItems([espacio, btnDone], animated: false)
+        textField.inputAccessoryView = toolbar
+    }
+
+    @objc func cerrarPicker() {
+        view.endEditing(true)
     }
     
 

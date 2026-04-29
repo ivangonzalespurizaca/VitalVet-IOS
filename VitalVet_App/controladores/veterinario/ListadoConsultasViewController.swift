@@ -14,7 +14,7 @@ class ListadoConsultasViewController: UIViewControllerProfile, UICollectionViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         cambiarTitulo(nuevoTexto: "Mis Consultas")
-        
+        self.imgPerfil.isHidden = true
         
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -25,6 +25,11 @@ class ListadoConsultasViewController: UIViewControllerProfile, UICollectionViewD
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         configurarDisenoColumnas()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchConsultas()
     }
 
     // MARK: - Diseño de 2 Columnas (Layout)
@@ -91,26 +96,13 @@ class ListadoConsultasViewController: UIViewControllerProfile, UICollectionViewD
         
         let consulta = listaConsultas[indexPath.item]
         
-        // Llenado de datos
-        cell.lblMascota.text = consulta.nombreMascota
-        cell.lblFecha.text = consulta.fechaConsulta
-        cell.txtdiagnostico.text = consulta.diagnostico
-        cell.img.image = UIImage(named: "pets.png")
-        cell.img.layer.cornerRadius = cell.img.frame.size.width / 2
-        cell.img.clipsToBounds = true
-        cell.img.contentMode = .scaleAspectFill
-        cell.layer.masksToBounds = false
-        
-        // Estilo visual de la tarjeta
-        cell.layer.cornerRadius = 12
-        cell.backgroundColor = .systemGray6
-        
-        // Configuración de sombra
-        cell.layer.shadowColor = UIColor.black.cgColor
-        cell.layer.shadowOffset = CGSize(width: 0, height: 2)
-        cell.layer.shadowRadius = 4
-        cell.layer.shadowOpacity = 0.1
-        cell.layer.masksToBounds = false
+        // Solo llamamos a la función de la celda y le pasamos los datos
+        cell.configurar(
+            mascota: consulta.nombreMascota,
+            fecha: consulta.fechaConsulta,
+            diagnostico: consulta.diagnostico,
+            imagenNombre: "pets.png" // O el nombre de tu imagen
+        )
         
         return cell
     }
@@ -130,9 +122,8 @@ class ListadoConsultasViewController: UIViewControllerProfile, UICollectionViewD
         }
     }
     
-    
-    // MARK: - Acciones
-    @IBAction func btnRegistrar(_ sender: UIButton) {
+    @IBAction func btnRegistrar(_ sender: Any) {
         performSegue(withIdentifier: "nuevo", sender: nil)
     }
+    
 }

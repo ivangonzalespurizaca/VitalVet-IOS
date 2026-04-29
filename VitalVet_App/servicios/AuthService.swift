@@ -50,16 +50,35 @@ class AuthService {
     }
     
     func registrarYPersistir(datos: UsuarioRegisterDTO, completion: @escaping (Result<UsuarioInfoDTO, Error>) -> Void) {
-        // Uso de baseURL para el registro
         let url = "\(railwayBaseURL)/registrar"
         
         AF.request(url, method: .post, parameters: datos, encoder: JSONParameterEncoder.default)
+            .validate()
             .response { response in
                 if let code = response.response?.statusCode, (200...299).contains(code) {
                     self.sincronizarConRailway(token: datos.idToken, completion: completion)
+                //Manejo de mesaje de errores
                 } else {
-                    let error = NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Error en el servidor de Railway"])
-                    completion(.failure(error))
+                    if let data = response.data {
+                        do {
+                            let apiError = try JSONDecoder().decode(APIError.self, from: data)
+                            
+                            if let dictErrores = apiError.errors, !dictErrores.isEmpty {
+                                let mensaje = dictErrores.map { "\($0.key): \($0.value)" }.joined(separator: "\n")
+                                let errorCustom = NSError(domain: "", code: apiError.status ?? 400,
+                                                         userInfo: [NSLocalizedDescriptionKey: mensaje])
+                                completion(.failure(errorCustom))
+                            } else {
+                                let errorCustom = NSError(domain: "", code: apiError.status ?? 500,
+                                                         userInfo: [NSLocalizedDescriptionKey: apiError.message ?? "Error desconocido"])
+                                completion(.failure(errorCustom))
+                            }
+                        } catch {
+                            let errorGeneral = NSError(domain: "", code: 500,
+                                                      userInfo: [NSLocalizedDescriptionKey: "Error en el servidor de Railway"])
+                            completion(.failure(errorGeneral))
+                        }
+                    }
                 }
             }
     }

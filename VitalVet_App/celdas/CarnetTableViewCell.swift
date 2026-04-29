@@ -14,10 +14,14 @@ class CarnetTableViewCell: UITableViewCell {
     @IBOutlet weak var txtFecha: UILabel!
     @IBOutlet weak var txtnombre: UILabel!
     
+    @IBOutlet weak var imgVacuna: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        imgVacuna.image = UIImage(named: "vacuna")
+        imgVacuna.contentMode = .scaleAspectFit
+        imgVacuna.layer.cornerRadius = imgVacuna.frame.height / 2
+        imgVacuna.clipsToBounds = true
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

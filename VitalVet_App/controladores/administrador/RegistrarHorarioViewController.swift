@@ -7,7 +7,7 @@
 
 import UIKit
 
-class RegistrarHorarioViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+class RegistrarHorarioViewController: UIViewControllerProfile, UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
@@ -52,10 +52,23 @@ class RegistrarHorarioViewController: UIViewController, UIPickerViewDelegate, UI
         cargarDiasSemana()
         pvDiaSemana.delegate = self
         pvDiaSemana.dataSource = self
+        cambiarTitulo(nuevoTexto: "Nuevo Horario")
         
+        // 1. Configurar Iconos y Estilo (SF Symbols)
+        // "calendar" para el día, "clock" para el inicio y "clock.badge.checkmark" para el fin
+        txtDiaSemana.configurarEstiloVitalVet(icono: "calendar", placeholder: "Día de la semana")
+        txtHoraInicio.configurarEstiloVitalVet(icono: "clock", placeholder: "Hora de inicio")
+        txtHoraFin.configurarEstiloVitalVet(icono: "clock.badge.checkmark", placeholder: "Hora de finalización")
+        
+        // 2. Configurar Selectores como entrada (inputView)
+        txtDiaSemana.inputView = pvDiaSemana
         configurarDatePicker(dpHoraInicio, para: txtHoraInicio)
         configurarDatePicker(dpHoraFin, para: txtHoraFin)
         
+        // 3. Bloquear cursor y teclados
+        [txtDiaSemana, txtHoraInicio, txtHoraFin].forEach { $0?.tintColor = .clear }
+        
+        // 4. Barras de herramientas
         configurarToolbar(para: txtDiaSemana)
         configurarToolbar(para: txtHoraInicio)
         configurarToolbar(para: txtHoraFin)
@@ -95,8 +108,7 @@ class RegistrarHorarioViewController: UIViewController, UIPickerViewDelegate, UI
                 case .success:
                     self?.mostrarAlertaExito()
                 case .failure(let error):
-                    print("DEBUG: Error al registrar -> \(error)")
-                    self?.mostrarAlerta(mensaje: "Hubo un error al registrar el horario.")
+                    self?.mostrarAlerta(mensaje: error.localizedDescription)
                 }
             }
         }
@@ -118,6 +130,7 @@ class RegistrarHorarioViewController: UIViewController, UIPickerViewDelegate, UI
         let btnDone = UIBarButtonItem(title: "Hecho", style: .prominent, target: self, action: #selector(cerrarPicker))
         let espacio = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         
+        btnDone.tintColor = UIColor.lightGray
         toolbar.setItems([espacio, btnDone], animated: false)
         textField.inputAccessoryView = toolbar
     }

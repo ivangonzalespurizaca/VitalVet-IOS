@@ -1,7 +1,7 @@
 import UIKit
 import Alamofire
 
-class ProgramarcitaController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+class ProgramarcitaController: UIViewControllerProfile, UIPickerViewDelegate, UIPickerViewDataSource {
 
     @IBOutlet weak var pickerVacunas: UIPickerView!
     @IBOutlet weak var datePicker: UIDatePicker!
@@ -14,10 +14,11 @@ class ProgramarcitaController: UIViewController, UIPickerViewDelegate, UIPickerV
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        cambiarTitulo(nuevoTexto: "Programar Vacuna")
         pickerVacunas.delegate = self
         pickerVacunas.dataSource = self
-        
+        txtNroDosis.configurarEstiloVitalVet(icono: "list.number", placeholder: "Nro de Dosis")
+        txtObservaciones.configurarEstiloVitalVet(icono: "note.text", placeholder: "Observaciones")
         // Cargamos las vacunas apenas abre la vista
         cargarCatalogoVacunas()
     }
@@ -63,39 +64,43 @@ class ProgramarcitaController: UIViewController, UIPickerViewDelegate, UIPickerV
 
     // MARK: - Registro Final (POST)
     @IBAction func btnGuardarProgramacion(_ sender: UIButton) {
-        guard let idMascota = id, let idVacuna = vacunaSeleccionadaId else {
-            print("Falta ID Mascota o Vacuna")
-            return
-        }
-        
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        let fechaStr = formatter.string(from: datePicker.date)
-        
-        // Construimos el body exacto que requiere tu API
-        let parametros: [String: Any] = [
-            "idVacuna": idVacuna,
-            "nroDosis": Int(txtNroDosis.text ?? "1") ?? 1,
-            "fechaProgramada": fechaStr,
-            "observaciones": txtObservaciones.text ?? ""
-        ]
-        
-        let urlPost = "https://apiveterinaria-production-238b.up.railway.app/api/vacunas-aplicadas/mascota/\(idMascota)/programar"
-        guard let token = UserDefaults.standard.string(forKey: "userToken") else { return }
-        let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-        
-        AF.request(urlPost,
-                   method: .post,
-                   parameters: parametros,
-                   encoding: JSONEncoding.default,
-                   headers: headers,
-        ).responseJSON { response in
-            if response.response?.statusCode == 201 || response.response?.statusCode == 200 {
-                self.alertExito()
-            } else {
-                print("Error al guardar: \(response.error?.localizedDescription ?? "Desconocido")")
+        // 1. Validaciones de IDs y Token
+            guard let idMascota = id,
+                  let idVacuna = vacunaSeleccionadaId,
+                  let token = UserDefaults.standard.string(forKey: "userToken") else {
+                alertError(mensaje: "No se pudo identificar la mascota o la sesión ha expirado.")
+                return
             }
-        }
+            
+            // 2. Validación de campos de texto
+            guard let dosisText = txtNroDosis.text, !dosisText.isEmpty else {
+                alertError(mensaje: "Por favor, ingresa el número de dosis.")
+                return
+            }
+
+            // 3. Formatear Fecha
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd"
+            let fechaStr = formatter.string(from: datePicker.date)
+
+            // 4. Preparar Diccionario
+            let parametros: [String: Any] = [
+                "idVacuna": idVacuna,
+                "nroDosis": Int(dosisText) ?? 1,
+                "fechaProgramada": fechaStr,
+                "observaciones": txtObservaciones.text ?? ""
+            ]
+
+            // 5. Llamar al Servicio con Alertas
+            VacunaService.shared.programarVacuna(idMascota: idMascota, datos: parametros, token: token) { [weak self] result in
+                switch result {
+                case .success:
+                    self?.alertExito()
+                case .failure(let error):
+                    // Aquí usamos nuestra nueva alerta de error
+                    self?.alertError(mensaje: error.localizedDescription)
+                }
+            }
     }
     
     func alertExito() {
@@ -103,6 +108,16 @@ class ProgramarcitaController: UIViewController, UIPickerViewDelegate, UIPickerV
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
             self.navigationController?.popViewController(animated: true)
         }))
+        present(alert, animated: true)
+    }
+    
+    func alertError(mensaje: String) {
+        let alert = UIAlertController(
+            title: "Error",
+            message: mensaje,
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "Entendido", style: .default))
         present(alert, animated: true)
     }
 }

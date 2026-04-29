@@ -15,45 +15,16 @@ class ListadoVeterinariosViewController: UIViewControllerProfile, UITableViewDat
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        // 1. Dequeue
         let cell = tableView.dequeueReusableCell(withIdentifier: "celda", for: indexPath) as! CeldaVeterinarios
+        
+        // 2. Obtener data
         let vet = listaVets[indexPath.row]
         
-        cell.lblNombres.text = "\(vet.nombres) \(vet.apellidos)"
-        
-        cell.lblEspecialidad.text = vet.especialidad.replacingOccurrences(of: "_", with: " ").capitalized
-        cell.lblColegiatura.text = "Colegiatura: \(vet.numColegiatura)"
-        
-        if vet.activo == true {
-                cell.lblActivo.text = "ACTIVO"
-                cell.lblActivo.textColor = .systemGreen
-            } else {
-                cell.lblActivo.text = "INACTIVO"
-                cell.lblActivo.textColor = .systemRed
-            }
-        
-        // Foto con Kingfisher
-        if var urlStr = vet.fotoUrl {
-            if urlStr.hasPrefix("http://") {
-                urlStr = urlStr.replacingOccurrences(of: "http://", with: "https://")
-            }
-            
-            if let url = URL(string: urlStr) {
-                cell.imgVet.kf.setImage(
-                    with: url,
-                    placeholder: UIImage(systemName: "person.crop.circle.fill"),
-                    options: [.transition(.fade(0.2))]
-                )
-            }
-        } else {
-            cell.imgVet.image = UIImage(systemName: "person.crop.circle.fill")
-        }
-        
-        // Estética de la imagen (Opcional si no lo tienes en el Storyboard)
-        cell.imgVet.layer.cornerRadius = 10
-        cell.imgVet.clipsToBounds = true
+        // 3. Pasar la responsabilidad a la celda
+        cell.configurar(con: vet)
         
         return cell
-         
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -68,11 +39,11 @@ class ListadoVeterinariosViewController: UIViewControllerProfile, UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
         cambiarTitulo(nuevoTexto: "Gestionar Veterinarios")
-        
+        self.imgPerfil.isHidden = true
         tvVeterinarios.dataSource = self
         tvVeterinarios.delegate = self
-        tvVeterinarios.rowHeight = 200
-        
+        tvVeterinarios.rowHeight = 125
+        tvVeterinarios.separatorStyle = .none
         cargarVeterinarios()
     }
     

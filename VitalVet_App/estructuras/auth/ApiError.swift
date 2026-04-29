@@ -11,5 +11,6 @@ nonisolated
 struct APIError: Codable {
     let status: Int?
     let message: String?
+    let timestamp: String?
     let errors: [String: String]?
 }

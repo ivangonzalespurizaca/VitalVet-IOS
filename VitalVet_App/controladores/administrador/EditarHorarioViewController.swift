@@ -23,6 +23,9 @@ class EditarHorarioViewController: UIViewController {
         super.viewDidLoad()
         configurarUI()
         cargarDatos()
+        txtDiaSemana.configurarEstiloVitalVet(icono: "calendar", placeholder: "Día de la semana")
+        txtHoraInicio.configurarEstiloVitalVet(icono: "clock", placeholder: "Hora de inicio")
+        txtHoraFin.configurarEstiloVitalVet(icono: "clock.badge.checkmark", placeholder: "Hora de finalización")
     }
     
     @IBAction func btnEditarHorario(_ sender: Any) {
@@ -109,6 +112,7 @@ class EditarHorarioViewController: UIViewController {
         let btnDone = UIBarButtonItem(title: "Hecho", style: .prominent, target: self, action: #selector(cerrarPicker))
         let espacio = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         
+        btnDone.tintColor = UIColor.lightGray
         toolbar.setItems([espacio, btnDone], animated: false)
         textField.inputAccessoryView = toolbar
     }
